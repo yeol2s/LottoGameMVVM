@@ -6,17 +6,31 @@
 //
 
 import UIKit
-
+// 씬델리게이트는 다른 씬으로 넘어가거나, 그런 시점들을 파악하기 위한 대리자
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-
-
+    
+    // (앱의 생명주기) 특정 Scene 객체가 처음 생성되고 연결될 때 호출(초기화 및 설정 작업을 수행하기 적합한 시점)
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
-        // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
-        // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
+
         guard let _ = (scene as? UIWindowScene) else { return }
+        
+        
+        let tabBarVC = UITabBarController() // 탭바 컨트롤러 생성
+        
+        let containerVC = ContainerViewController() // 컨테이너 뷰컨트롤러 인스턴스 생성
+        let secondVC = UINavigationController(rootViewController: MyNumbersViewController()) // '내 번호' 뷰컨트롤러 인스턴스 및 네비컨트롤러 생성
+        
+        tabBarVC.setViewControllers([containerVC, secondVC], animated: false) // 탭바 설정
+        tabBarVC.modalPresentationStyle = .fullScreen
+        tabBarVC.tabBar.backgroundColor = .white
+        containerVC.tabBarItem = UITabBarItem(title: "메인 화면", image: UIImage(systemName: "house.fill"), selectedImage: nil)
+        secondVC.tabBarItem = UITabBarItem(title: "내 번호", image: UIImage(systemName: "heart.fill"), selectedImage: nil)
+    
+        // 기본 rootView 탭바로 설정
+        window?.rootViewController = tabBarVC // 탭바의 첫 화면은 '컨테이너 뷰컨트롤러'
+        window?.makeKeyAndVisible() // 터치 이벤트 사용자 입력 활성화
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
