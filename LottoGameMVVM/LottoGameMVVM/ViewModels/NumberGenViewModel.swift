@@ -13,6 +13,11 @@ protocol NumberGenViewControllerDelegate: AnyObject { // AnyObject로 클래스�
     func didTapMenuButton() // (요구사항 메서드)메뉴 버튼 누를시
 }
 
+// MARK: - (타입애일리어스)네임드 튜플 타입 정의(Alert)
+// ❓❓❓네임드 튜플 이렇게 클래스 외부에 선언했는데 이렇게 해도 정석인가?
+// Alert 상태(title-message-button개수) 전달하기 위한 네임드 튜플 타입 선언
+typealias AlertStatusTuple = (title: String, message: String, cancelButtonUse: Bool)
+
 // MARK: - 메인 뷰컨트롤러(번호 생성) 뷰모델
 final class NumberGenViewModel {
     
@@ -21,6 +26,17 @@ final class NumberGenViewModel {
     private var defaultsTemp: [[Int]] = [] // 유저디폴츠 데이터 임시공간 배열
     
     var numbers: [NumbersGen] = [] // 모델 인스턴스 생성
+    
+    // 뷰 Alert 이벤트 발생시 메세지 업데이트
+    private var alertSet: AlertStatusTuple? { // (타입애일리어스)네임드 튜플(title, message, cancelButtonUse)
+        didSet { // 속성감시자(Alert 메세지가 변경되면 클로저 호출)
+            if let alertSet = alertSet {
+                showAlertClosure?((alertSet.title, alertSet.message, alertSet.cancelButtonUse)) // 타이틀, 메세지, 버튼 설정
+            }
+        }
+    }
+
+    var showAlertClosure: ((AlertStatusTuple) -> Void)? // Alert 클로저 선언(뷰에서 클로저 할당)(타입애일리어스(튜플) 파라미터 사용-(title,message,button))
     
     
     // MARK: - Input
@@ -39,7 +55,7 @@ final class NumberGenViewModel {
             }
         }
         
-        // ❓ (성준 질문) 이렇게 중복 번호 방지하는 것 괜찮은 로직인가?
+        // ❓❓❓ 이렇게 중복 번호 방지하는 것 괜찮은 로직인가?
         // 이미 화면에 생성된 중복된 값이 나오면 처리
         if !numbers.isEmpty { // (모델)구조체 배열이 비어있지 않다면(생성된 번호가 없을때 코드 넘기게끔)
             for num in numbers {
@@ -69,7 +85,13 @@ final class NumberGenViewModel {
         defaultsTemp.removeAll() // (하트 초기화)유저디폴츠 임시 저장 초기화
     }
     
-    // 이어서 구현하자..
+    // ⚠️  이어서 구현하자..
+    
+    // Alert Title,Message,Bool 튜플로 받아와서 네임드 튜플로 설정(속성감시자)
+    // alertSet의 값이 변경되면 속성감시자가 실행되면서 클로저 호출
+    func alertPerformAction(title: String, message: String, cancelButtonUse: Bool) {
+        alertSet = (title, message, cancelButtonUse) // 튜플타입으로 할당
+    }
     
     // MARK: - Output
     

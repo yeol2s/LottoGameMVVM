@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9625BDE12B2C11BB007457C2 /* NumTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9625BDE02B2C11BB007457C2 /* NumTableViewCell.swift */; };
+		9625BDE42B2C161D007457C2 /* Question.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9625BDE32B2C161D007457C2 /* Question.swift */; };
 		9668055C2B2A567800480B40 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9668055B2B2A567800480B40 /* AppDelegate.swift */; };
 		9668055E2B2A567800480B40 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9668055D2B2A567800480B40 /* SceneDelegate.swift */; };
 		966805602B2A567800480B40 /* ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9668055F2B2A567800480B40 /* ContainerViewController.swift */; };
@@ -20,6 +22,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9625BDE02B2C11BB007457C2 /* NumTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumTableViewCell.swift; sourceTree = "<group>"; };
+		9625BDE32B2C161D007457C2 /* Question.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Question.swift; sourceTree = "<group>"; };
 		966805582B2A567800480B40 /* LottoGameMVVM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LottoGameMVVM.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9668055B2B2A567800480B40 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9668055D2B2A567800480B40 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -45,6 +49,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9625BDDF2B2C116F007457C2 /* SubViews */ = {
+			isa = PBXGroup;
+			children = (
+				9625BDE02B2C11BB007457C2 /* NumTableViewCell.swift */,
+			);
+			path = SubViews;
+			sourceTree = "<group>";
+		};
+		9625BDE22B2C15EF007457C2 /* Question */ = {
+			isa = PBXGroup;
+			children = (
+				9625BDE32B2C161D007457C2 /* Question.swift */,
+			);
+			path = Question;
+			sourceTree = "<group>";
+		};
 		9668054F2B2A567800480B40 = {
 			isa = PBXGroup;
 			children = (
@@ -64,6 +84,7 @@
 		9668055A2B2A567800480B40 /* LottoGameMVVM */ = {
 			isa = PBXGroup;
 			children = (
+				9625BDE22B2C15EF007457C2 /* Question */,
 				9668055B2B2A567800480B40 /* AppDelegate.swift */,
 				9668055D2B2A567800480B40 /* SceneDelegate.swift */,
 				966805722B2A584400480B40 /* APIService */,
@@ -130,6 +151,7 @@
 		9668057B2B2AC3CF00480B40 /* Main */ = {
 			isa = PBXGroup;
 			children = (
+				9625BDDF2B2C116F007457C2 /* SubViews */,
 				9668057C2B2AC3F900480B40 /* NumbersGenViewController.swift */,
 			);
 			path = Main;
@@ -209,7 +231,9 @@
 				966805602B2A567800480B40 /* ContainerViewController.swift in Sources */,
 				9668057A2B2AB0A900480B40 /* MenuViewController.swift in Sources */,
 				966805762B2AACB100480B40 /* NumberGenViewModel.swift in Sources */,
+				9625BDE42B2C161D007457C2 /* Question.swift in Sources */,
 				9668057D2B2AC3F900480B40 /* NumbersGenViewController.swift in Sources */,
+				9625BDE12B2C11BB007457C2 /* NumTableViewCell.swift in Sources */,
 				966805742B2AAC5500480B40 /* NumberGen.swift in Sources */,
 				9668055C2B2A567800480B40 /* AppDelegate.swift in Sources */,
 				9668055E2B2A567800480B40 /* SceneDelegate.swift in Sources */,

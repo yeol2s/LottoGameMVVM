@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - 번호 데이터 모델
+
 // 로또 번호 모델
 struct NumbersGen {
     
