@@ -35,7 +35,7 @@ final class NumberGenViewModel {
             }
         }
     }
-
+    
     var showAlertClosure: ((AlertStatusTuple) -> Void)? // Alert 클로저 선언(뷰에서 클로저 할당)(타입애일리어스(튜플) 파라미터 사용-(title,message,button))
     
     
@@ -85,7 +85,48 @@ final class NumberGenViewModel {
         defaultsTemp.removeAll() // (하트 초기화)유저디폴츠 임시 저장 초기화
     }
     
-    // ⚠️  이어서 구현하자..
+    // (뷰의 번호 생성 화면에서) 번호 저장시 호출되는 메서드
+    // 테이블뷰의 셀에서 인덱스를 가지고 모델의 isSaved를 토글 시킴
+    // Result 타입 사용(연관값 미사용으로 성공인 경우 true 필요없이 Success는 Void 타입 사용)
+    func setNumberSaved(row: Int) -> Result<Void, SaveError> {
+        // (저장된)유저디폴츠 데이터가 없으면 이 바인딩은 nil이므로 아래 토글부터 실행됨
+        // 먼저 바인딩이 완료되면 저장데이터가 10개 이상인지 확인하고 -> '체크했던 것'을 '체크 해제'하는 건지 확인해서 처리
+        if let saveData = userDefaults.array(forKey: saveKey) as? [[Int]] {
+            if saveData.count >= 10 { // 유저디폴츠 데이터가 10개 이상이 되면
+                return Result.failure(.overError) // error 처리(초과)
+            }
+            if saveData.contains(numbers[row].numbersList) { // (저장할 번호가)유저디폴츠에 이미 저장되어 있다면
+                if numbers[row].isSaved { // 체크가 되어있다면 true일 것  (뷰에서 체크했다가 -> 체크해제시)
+                    numbers[row].isSaved.toggle() // 토글로 false로 변환
+                    userSavedSelectRemove(row: row) // (내부로직)유저디폴츠에서도 삭제
+                    return Result.success(()) // Success(void)
+                } else { // 중복된 번호가 체크될 시(뷰에서 체크했는데 -> 이미 저장되어있던 번호라면)
+                    return Result.failure(.duplicationError) // error 처리(중복)
+                }
+            }
+        }
+        
+        // ⚠️ 여기서부터 마저 구현하자 .... (보류)
+        
+        numbers[row].isSaved.toggle() // 모델에 인덱스로 접근해서 토글해서 모델의 isSaved true로 변경
+        //(모델의)isSaved의 상태
+        if numbers[row].isSaved { // true일때 유저디폴츠에 저장
+            userSaveSelectDataAdd(row: row)
+        }else { // false일때 유저디폴츠에서 삭제(하트 해제)
+            userSaveSelectRemove(row: row)
+        }
+        
+        return Result.success(()) // Success(void)
+    }
+    
+    // ⚠️ 이어서 구현하자..
+    func getNumberSaved(row: Int) -> Bool {
+        return true
+    }
+    private func userSaveSelectDataAdd(row: Int) {
+        
+    }
+    
     
     // Alert Title,Message,Bool 튜플로 받아와서 네임드 튜플로 설정(속성감시자)
     // alertSet의 값이 변경되면 속성감시자가 실행되면서 클로저 호출
@@ -99,10 +140,34 @@ final class NumberGenViewModel {
     func getNumbersCount() -> Int {
         return numbers.count
     }
-
-
-
-
+    
+    // 생성된 번호 indexPath에 맞춰 (뷰의)테이블뷰에 전달
+    func getNumbersList(row: Int) -> [Int] {
+        return numbers[row].numbersList
+    }
+    
+    
+    
+    // MARK: - 뷰모델 내부 로직들
+    
+    // (유저디폴츠)저장된 번호 삭제 메서드(하트 선택 해제)
+    private func userSavedSelectRemove(row: Int) {
+        if let saveData = userDefaults.array(forKey: saveKey) as? [[Int]] {
+            for value in saveData { // 유저디폴츠 데이터로 반복문 돌려서
+                if numbers[row].numbersList == value { // 현재 선택해제 된 번호의 값과 같은지 찾고
+                    if let index = defaultsTemp.firstIndex(of: value) { // 현재 값이 임시배열에서 몇번째 인덱스값인지 찾고
+                        defaultsTemp.remove(at: index) // 임시배열에서 인덱스 기준으로 삭제
+                    }
+                }
+            }
+            userDefaults.set(defaultsTemp, forKey: saveKey) // 정리된 상태의 임시배열로 유저디폴츠에 다시 넣어줌
+        }
+    }
+    
+    
+    
+    
+    
     
     
 }

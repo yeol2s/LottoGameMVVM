@@ -19,6 +19,7 @@
 		966805762B2AACB100480B40 /* NumberGenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966805752B2AACB100480B40 /* NumberGenViewModel.swift */; };
 		9668057A2B2AB0A900480B40 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966805792B2AB0A900480B40 /* MenuViewController.swift */; };
 		9668057D2B2AC3F900480B40 /* NumbersGenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9668057C2B2AC3F900480B40 /* NumbersGenViewController.swift */; };
+		96E515E02B2DF1E600B5E9B3 /* NumberBallListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96E515DF2B2DF1E600B5E9B3 /* NumberBallListViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		966805752B2AACB100480B40 /* NumberGenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberGenViewModel.swift; sourceTree = "<group>"; };
 		966805792B2AB0A900480B40 /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		9668057C2B2AC3F900480B40 /* NumbersGenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumbersGenViewController.swift; sourceTree = "<group>"; };
+		96E515DF2B2DF1E600B5E9B3 /* NumberBallListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberBallListViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,6 +113,7 @@
 		966805702B2A580E00480B40 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				96E515DE2B2DF16F00B5E9B3 /* CommonViewModel */,
 				966805752B2AACB100480B40 /* NumberGenViewModel.swift */,
 			);
 			path = ViewModels;
@@ -155,6 +158,14 @@
 				9668057C2B2AC3F900480B40 /* NumbersGenViewController.swift */,
 			);
 			path = Main;
+			sourceTree = "<group>";
+		};
+		96E515DE2B2DF16F00B5E9B3 /* CommonViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				96E515DF2B2DF1E600B5E9B3 /* NumberBallListViewModel.swift */,
+			);
+			path = CommonViewModel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -228,6 +239,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				96E515E02B2DF1E600B5E9B3 /* NumberBallListViewModel.swift in Sources */,
 				966805602B2A567800480B40 /* ContainerViewController.swift in Sources */,
 				9668057A2B2AB0A900480B40 /* MenuViewController.swift in Sources */,
 				966805762B2AACB100480B40 /* NumberGenViewModel.swift in Sources */,

@@ -14,7 +14,7 @@ final class NumbersGenViewController: UIViewController {
     
     private var viewModel: NumberGenViewModel! // ! -> 뷰모델 인스턴스 생성(IUO - 암시적 추출 옵셔널 : 벗겨질 준비가 되어있고, 변수에 담을때 자동으로 언래핑)
     
-    weak var delegate: NumberGenViewControllerDelegate? // 델리게이트 대리자 지정 변수 선언
+    weak var delegate: NumberGenViewControllerDelegate? // 델리게이트 대리자 지정 변수 선언(컨테이너뷰-메뉴바 사용)
     
     private let numTableView = UITableView() // 테이블뷰 생성(번호 10줄)
     
@@ -181,6 +181,7 @@ final class NumbersGenViewController: UIViewController {
         }
         present(alert, animated: true)
     }
+    
     // Alert 핸들러 메서드
     private func alertHandlerAction(_ status: String) {
         
@@ -191,8 +192,13 @@ final class NumbersGenViewController: UIViewController {
         default:
             break
         }
-        
     }
+    
+    // 메뉴버튼 눌렀을때 셀렉터 메서드(네비바 햄버거 아이콘)
+    @objc private func didTapMenuButton() {
+        delegate?.didTapMenuButton() // 델리게이트 프로토콜을 준수하는 객체에서만 실행가능한 메서드(해당 프로토콜을 채택하지 않으면 nil이 반환)
+    }
+    
     
 }
 
@@ -206,5 +212,31 @@ extension NumbersGenViewController: UITableViewDelegate {
 
 // UITableViewDataSource 확장
 extension NumbersGenViewController: UITableViewDataSource {
+    // 테이블뷰 몇개의 데이터 표시할건지
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return viewModel.getNumbersCount()
+    }
+    // 테이블뷰 셀을 어떻게 구성할건지(numberOfRowsInSection과 함께 동작한다.)(데이터의 개수에 따라 이 메서드가 동작하며 스크롫할때마다 재구성이 됨)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = numTableView.dequeueReusableCell(withIdentifier: "NumCell", for: indexPath) as! NumTableViewCell // 재사용 셀 등록
+        
+        let numbers = viewModel.getNumbersList(row: indexPath.row) // 현재 생성된 번호를 index 기준으로 가져와서 담음
+        cell.numbersBallListInsert(numbers: numbers) // 셀에게 번호 전달해서 공 모양의 번호로 표시 (❓❓❓ 이 부분 MVVM 패턴 준수하는건가?)
+        cell.selectionStyle = .none // 셀 선택시 회색으로 표시하지 않도록 설정
+        
+        // (번호 생성화면 하트 눌러서) 번호 저장 (버튼은 셀에서 구현)
+        cell.saveButtonPressed = { [weak self] senderCell in
+            guard let self = self else { return }
+            
+            // ⚠️ 여기서부터 마저 구현하자 (뷰모델과 함께 작성중이었음)
+            
+            
+            
+        }
+        
+        
+        return cell
+    }
+    
     
 }

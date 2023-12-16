@@ -10,11 +10,11 @@ import UIKit
 // MARK: - 메인뷰컨트롤러 (번호생성)테이블뷰 셀
 
 // (번호 생성 테이블뷰)테이블뷰 셀
-class NumTableViewCell: UITableViewCell {
+final class NumTableViewCell: UITableViewCell {
     
     // MARK: - 테이블뷰 셀 속성
     
-    private let ballListView = NumberBallListView() // 번호 공 모양 만드는 객체 생성(UIStackView)
+    private let ballListViewModel = NumberBallListViewModel() // 번호 공 모양 만드는 객체 생성(UIStackView)
     
     // 숫자 출력 레이블(UIStackView로 공모양으로 받아와서 이 레이블에 addSubView)
     private let numberLabel: UILabel = {
@@ -79,12 +79,12 @@ class NumTableViewCell: UITableViewCell {
     private func setupStackView() {
         self.contentView.addSubview(stackView) // 스택뷰를 셀에 올림
         
-        ballListView.translatesAutoresizingMaskIntoConstraints = false
+        ballListViewModel.translatesAutoresizingMaskIntoConstraints = false
         
         // 스택뷰위에 레이블, 버튼을 배열형태로 올린다.
         stackView.addArrangedSubview(numberLabel)
         stackView.addArrangedSubview(saveButton)
-        numberLabel.addSubview(ballListView) // 넘버레이블위에 ballListView 스택뷰 넣어줌
+        numberLabel.addSubview(ballListViewModel) // 넘버레이블위에 ballListView 스택뷰 넣어줌
     }
     
     // 스택뷰 오토레이아웃
@@ -100,17 +100,17 @@ class NumTableViewCell: UITableViewCell {
         
         // ballListView 오토레이아웃(레이블 기준으로)
         NSLayoutConstraint.activate([
-            ballListView.centerXAnchor.constraint(equalTo: self.numberLabel.centerXAnchor),
-            ballListView.centerYAnchor.constraint(equalTo: self.numberLabel.centerYAnchor)
+            ballListViewModel.centerXAnchor.constraint(equalTo: self.numberLabel.centerXAnchor),
+            ballListViewModel.centerYAnchor.constraint(equalTo: self.numberLabel.centerYAnchor)
         ])
     }
     
     // MARK: - Input & Output
 
     
-    // 번호 받아서 공 모양으로 바꾸기 위한 메서드(UIStackView)
+    // 번호 받아서 공 모양으로 바꿔서 셀에 표시하기 위한 메서드(UIStackView)
     func numbersBallListInsert(numbers: [Int]) {
-        ballListView.displayNumbers(numbers)
+        ballListViewModel.displayNumbers(numbers)
     }
     
     // 번호저장 버튼 눌렸을때 셀렉터

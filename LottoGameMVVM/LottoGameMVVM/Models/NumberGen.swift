@@ -19,3 +19,11 @@ struct NumbersGen {
     var isSaved: Bool = false
 
 }
+
+
+// MARK: - 번호 데이터 저장 에러 처리(중복저장 및 초과저장)
+enum SaveError: Error {
+    case overError
+    case duplicationError
+}
+
