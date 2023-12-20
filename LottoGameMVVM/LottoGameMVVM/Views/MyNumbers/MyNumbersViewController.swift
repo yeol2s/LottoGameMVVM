@@ -247,7 +247,7 @@ final class MyNumbersViewController: UIViewController {
     }
     
     
-    // MARK: - Input 관련 메서드
+    // MARK: - Input 관련 메서드(내부로직 포함)
     
     // ❓❓❓ 이 뷰의 경우에는 Alert이 간단한 리셋 버튼 한개라서 뷰컨에다가 그냥 구현
     // 저장된 번호 리셋

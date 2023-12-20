@@ -46,10 +46,14 @@ final class NumberGenViewModel {
     // MARK: - Input
     
     // 번호 생성 메서드(생성 버튼 누를시)
-    func generateNumbersTapped() -> Bool {
-        var lottoNumbers: [Int] = [] // 번호 생성시마다 번호 임시 저장
+    func generateNumbersTapped() /*-> Bool*/ {
         
-        guard numbers.count <= 9 else { return false } // 테이블뷰에 (모델)번호 리스트가 10개이상 생성되지 않게 guard문 처리
+        // guard문으로 현재 생성된 번호가 10개이상인지 체크해서 번호생성 or Alert생성
+        guard numbers.count <= 9 else { 
+            alertPerformAction(title: "생성된 번호 10개", message: "생성 가능한 번호는 최대 10개입니다.", cancelButtonUse: false)
+            return }
+        
+        var lottoNumbers: [Int] = [] // 번호 생성시마다 번호 임시 저장
         
         while lottoNumbers.count < 6 { // 임시 저장 배열의 번호가 6개가 될때까지 반복
             let randomNumber = Int.random(in: 1...45)
@@ -80,7 +84,7 @@ final class NumberGenViewModel {
         }
         // 생성완료 된 6개의 번호를 (모델)구조체 배열에 넣어준다.(구조체 배열은 append시 이렇게 인스턴스 생성해서 넣어줘야 함)
         numbers.append(NumbersGen(numbersList: lottoNumbers.sorted()))
-        return true
+       //return true
     }
     
     // 번호 리셋 메서드

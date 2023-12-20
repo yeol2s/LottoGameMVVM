@@ -150,20 +150,13 @@ final class NumbersGenViewController: UIViewController {
     }
     
     // MARK: - Input 관련 메서드
-    
-    // 📌 뷰 로직은 뷰를 위한 간단한 로직이고 복잡하면 잘못짠거다라고 의심해보자.
-    // 로직이라 할만한 것들은 뷰모델로 다 보내야됨.
-    
+ 
     // 번호 생성버튼 셀렉터 메서드(뷰모델에게 전달)
     @objc private func genButtonTapped() {
-        // 📌 이런 판단은 뷰모델에서 할 것
-        if viewModel.generateNumbersTapped() { // 번호가 10개 이하 일때만 true -> 번호 생성
-            numTableView.reloadData()
-        } else {
-            // 생성번호 10개이상 발생시 false -> Alert 발생(뷰모델에서 처리할 수 있도록 구현)
-            // 뷰모델에게 title, message, cancel action 사용유무를 전달해서 alert 띄움
-            viewModel.alertPerformAction(title: "생성된 번호 10개", message: "생성된 가능한 번호는 최대 10개입니다.", cancelButtonUse: false)
-        }
+        
+        viewModel.generateNumbersTapped() // 뷰모델에서 판단 후 생성 or Alert 처리
+        numTableView.reloadData()
+
     }
     
     // 번호 리셋버튼 셀렉터 메서드(뷰모델에게 전달)
