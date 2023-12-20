@@ -5,7 +5,8 @@
 //  Created by 유성열 on 12/14/23.
 //
 
-import UIKit
+// 📌 Foundation으로 뷰모델에 UIKit 코드없는 것 확인
+import Foundation
 
 // MARK: - 메인 뷰컨트롤러 델리게이트 패턴(컨테이너뷰컨과 통신을 위해)
 // 탭을 눌렀을때 전달을 위한 프로토콜
@@ -21,6 +22,9 @@ typealias AlertStatusTuple = (title: String, message: String, cancelButtonUse: B
 // MARK: - 메인 뷰컨트롤러(번호 생성) 뷰모델
 final class NumberGenViewModel {
     
+    // MARK: - 뷰모델 속성
+    
+    // 유저디폴츠 관련 설정
     private let userDefaults = UserDefaults.standard // 유저디폴츠 사용을 위한 변수 생성(유저디폴츠의 싱글톤 인스턴스를 참조)
     private let saveKey: String = "MyNumbers" // 유저디폴츠 번호저장 키
     private var defaultsTemp: [[Int]] = [] // 유저디폴츠 데이터 임시공간 배열
@@ -80,7 +84,7 @@ final class NumberGenViewModel {
     }
     
     // 번호 리셋 메서드
-    func resetNumbersButtonTapped() {
+    func numbersResetButtonTapped() {
         numbers.removeAll() // (모델)구조체 배열 초기화
         defaultsTemp.removeAll() // (하트 초기화)유저디폴츠 임시 저장 초기화
     }
@@ -92,6 +96,7 @@ final class NumberGenViewModel {
         // (저장된)유저디폴츠 데이터가 없으면 이 바인딩은 nil이므로 아래 토글부터 실행됨
         // 먼저 바인딩이 완료되면 저장데이터가 10개 이상인지 확인하고 -> '체크했던 것'을 '체크 해제'하는 건지 확인해서 처리
         if let saveData = userDefaults.array(forKey: saveKey) as? [[Int]] {
+            // MARK: 10개이상 처리, 체크 후 체크해제 처리, 중복 번호 처리
             if saveData.count >= 10 { // 유저디폴츠 데이터가 10개 이상이 되면
                 return Result.failure(.overError) // error 처리(초과)
             }
@@ -105,29 +110,19 @@ final class NumberGenViewModel {
                 }
             }
         }
-        
-        // ⚠️ 여기서부터 마저 구현하자 .... (보류)
-        
         numbers[row].isSaved.toggle() // 모델에 인덱스로 접근해서 토글해서 모델의 isSaved true로 변경
         //(모델의)isSaved의 상태
+        // ❓❓❓ (질문) if문 처리하는 거 그냥 빼는 것이 더 좋을까? (else 부분을 뭔가 안정성을 위해서 그대로 사용했는데.)
         if numbers[row].isSaved { // true일때 유저디폴츠에 저장
             userSaveSelectDataAdd(row: row)
-        }else { // false일때 유저디폴츠에서 삭제(하트 해제)
-            userSaveSelectRemove(row: row)
+        }else { // false일때 유저디폴츠에서 삭제(하트 해제) // (이 부분은 굳이 필요없다. 위에서 처리하니까. 그래도 한번 더 확인차 그대로 둠)
+            userSavedSelectRemove(row: row)
         }
         
         return Result.success(()) // Success(void)
     }
     
-    // ⚠️ 이어서 구현하자..
-    func getNumberSaved(row: Int) -> Bool {
-        return true
-    }
-    private func userSaveSelectDataAdd(row: Int) {
-        
-    }
-    
-    
+    // MARK: Alert
     // Alert Title,Message,Bool 튜플로 받아와서 네임드 튜플로 설정(속성감시자)
     // alertSet의 값이 변경되면 속성감시자가 실행되면서 클로저 호출
     func alertPerformAction(title: String, message: String, cancelButtonUse: Bool) {
@@ -146,9 +141,45 @@ final class NumberGenViewModel {
         return numbers[row].numbersList
     }
     
+    // (저장 확인) 테이블뷰에게 전달하기 위한 현재 저장 상태 확인 메서드
+    func getNumberSaved(row: Int) -> Bool {
+        let isSaved = numbers[row].isSaved // number 구조체 배열의 현재 저장 상태를 전달
+        return isSaved
+    }
+    
+    // (번호 저장) 번호 생성화면에서 번호를 유저디폴츠와 현재 번호와 비교해서 있는지 없는지 확인
+    // 생성 화면에서 번호 저장 후 '내 번호' 화면에서 번호 저장을 해제했을 때 생성 화면에서도 해당 번호의 하트가 지워지도록.
+    // 테이블뷰 메서드에서 셀을 다시 그릴때마다 확인(Bool 리턴)
+    func isBookmarkNumbers(numbers: [Int]) -> Bool {
+        if let saveData = userDefaults.array(forKey: saveKey) as? [[Int]] {
+            if saveData.contains(numbers) {
+                return true
+            }
+        }
+        return false
+    }
+    // (번호 저장) isBookmarkNumbers 메서드에서 false 반환시 테이블뷰 셀 메서드에서 indexPath를 가지고 해당 번호의 isSaved를 false로 변경
+    func isBookmarkUnsavedToggle(row: Int) {
+        numbers[row].isSaved = false
+    }
+    
+    
     
     
     // MARK: - 뷰모델 내부 로직들
+    
+    
+    // (유저디폴츠)번호 저장 메서드(하트 선택)
+    private func userSaveSelectDataAdd(row: Int) {
+        defaultsTemp.removeAll() // (유저디폴츠)임시배열 초기화
+        
+        if let saveData = userDefaults.array(forKey: saveKey) as? [[Int]] {
+            defaultsTemp = saveData // 유저디폴츠 데이터를 일단 임시 저장 배열에 넣어주고
+        }
+        
+        defaultsTemp.append(numbers[row].numbersList) // 선택된 번호 배열을 추가
+        userDefaults.setValue(defaultsTemp, forKey: saveKey) // 유저디폴츠에 임시 저장된 배열로 다시 설정
+    }
     
     // (유저디폴츠)저장된 번호 삭제 메서드(하트 선택 해제)
     private func userSavedSelectRemove(row: Int) {
@@ -163,12 +194,6 @@ final class NumberGenViewModel {
             userDefaults.set(defaultsTemp, forKey: saveKey) // 정리된 상태의 임시배열로 유저디폴츠에 다시 넣어줌
         }
     }
-    
-    
-    
-    
-    
-    
     
 }
 

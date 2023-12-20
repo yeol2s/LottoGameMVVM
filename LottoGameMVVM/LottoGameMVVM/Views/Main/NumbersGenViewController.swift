@@ -12,12 +12,14 @@ final class NumbersGenViewController: UIViewController {
     
     // MARK: - 뷰컨트롤러 속성
     
-    private var viewModel: NumberGenViewModel! // ! -> 뷰모델 인스턴스 생성(IUO - 암시적 추출 옵셔널 : 벗겨질 준비가 되어있고, 변수에 담을때 자동으로 언래핑)
+    private var viewModel: NumberGenViewModel = NumberGenViewModel() // 번호 생성 뷰모델 인스턴스 생성
     
     weak var delegate: NumberGenViewControllerDelegate? // 델리게이트 대리자 지정 변수 선언(컨테이너뷰-메뉴바 사용)
     
-    private let numTableView = UITableView() // 테이블뷰 생성(번호 10줄)
+    private let numTableView: UITableView = UITableView() // 테이블뷰 생성(번호 10줄)
     
+    // ⭐️ 아래 UI속성들을 lazy var로 선언하는 이유는 -> 뷰 계층이 로드된 시점 이후에 버튼을 초기화 해야 하므로?
+    // 뷰가 로드되고 난 후 오토레이아웃을 설정하는 경우에 해당(컴파일시 메모리에 동시에 올라가므로 순서가 필요한 것)
     // 번호 생성 버튼
     private lazy var generateButton: UIButton = {
         let button = UIButton(type: .system)
@@ -58,6 +60,12 @@ final class NumbersGenViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        
+        //setupNaviBar() // 네비게이션바 설정 메서드 호출(컨테이너뷰컨에서 네비컨트롤러 생성)
+        setupTableView() // 테이블뷰 대리자 지정 설정 및 셀등록 함수 호출
+        setupTableViewConstraints() // 테이블뷰 오토레이아웃
+        setupGenButtonConstraints() // 생성 버튼 오토레이아웃
+        resetButtonConstraints() // 리셋 버튼 오토레이아웃
         
         // 뷰모델의 Alert 설정 클로저에 할당
         // 뷰모델에서 클로저를 호출시면서 alert 설정한 정보를 status로 받음(title, message, button 튜플)
@@ -143,8 +151,12 @@ final class NumbersGenViewController: UIViewController {
     
     // MARK: - Input 관련 메서드
     
+    // 📌 뷰 로직은 뷰를 위한 간단한 로직이고 복잡하면 잘못짠거다라고 의심해보자.
+    // 로직이라 할만한 것들은 뷰모델로 다 보내야됨.
+    
     // 번호 생성버튼 셀렉터 메서드(뷰모델에게 전달)
     @objc private func genButtonTapped() {
+        // 📌 이런 판단은 뷰모델에서 할 것
         if viewModel.generateNumbersTapped() { // 번호가 10개 이하 일때만 true -> 번호 생성
             numTableView.reloadData()
         } else {
@@ -163,7 +175,6 @@ final class NumbersGenViewController: UIViewController {
     }
     
     //❓❓❓ Alert 이렇게 처리하는거 괜찮은건지(뭔가 어거지 느낌이 강해짐)
-    // ⚠️ Alert 구현 부분은 뷰모델과 함께 빌드 후 테스트해보자. (미완성으로 아직 실행 테스트 못해봄)
     // Alert 메서드('확인' 버튼만 구현할 것인지? '취소' 버튼까지 추가 구현할 것인지? -> Bool 여부에 따라 결정)
     // title, message는 호출과 함께 전달
     func showAlert(title: String , message: String, cancelButtonUse: Bool) {
@@ -187,7 +198,7 @@ final class NumbersGenViewController: UIViewController {
         
         switch status {
         case "번호 초기화":
-            viewModel.resetNumbersButtonTapped() // 뷰모델에 번호 초기화 요청
+            viewModel.numbersResetButtonTapped() // 뷰모델에 번호 초기화 요청
             numTableView.reloadData() // 테이블뷰 리로드
         default:
             break
@@ -203,7 +214,7 @@ final class NumbersGenViewController: UIViewController {
 }
 
 
-// MARK: - 테이블뷰 관련 델리게이트 확장
+// MARK: - 테이블뷰
 
 // UITableViewDelegate 확장
 extension NumbersGenViewController: UITableViewDelegate {
@@ -220,23 +231,43 @@ extension NumbersGenViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = numTableView.dequeueReusableCell(withIdentifier: "NumCell", for: indexPath) as! NumTableViewCell // 재사용 셀 등록
         
+        // 📌 getNumbersList 바인딩 해볼 것(데이터 바인딩) - 클로저로 해볼 것
         let numbers = viewModel.getNumbersList(row: indexPath.row) // 현재 생성된 번호를 index 기준으로 가져와서 담음
         cell.numbersBallListInsert(numbers: numbers) // 셀에게 번호 전달해서 공 모양의 번호로 표시 (❓❓❓ 이 부분 MVVM 패턴 준수하는건가?)
         cell.selectionStyle = .none // 셀 선택시 회색으로 표시하지 않도록 설정
         
+        // MARK: '번호 저장'누를 때 마다 '번호 저장 상태' 설정 (하트 표시 유무)
         // (번호 생성화면 하트 눌러서) 번호 저장 (버튼은 셀에서 구현)
+        // 번호 저장 버튼 눌릴때 호출
         cell.saveButtonPressed = { [weak self] senderCell in
             guard let self = self else { return }
             
-            // ⚠️ 여기서부터 마저 구현하자 (뷰모델과 함께 작성중이었음)
+            let saveResult = self.viewModel.setNumberSaved(row: indexPath.row) // 번호 저장 메서드 호출 -> Rsult로 리턴
             
-            
-            
+            switch saveResult {
+            case .success: // 연관값 미사용(void)
+                // ❓❓❓ MVVM 패턴에서 셀에 set 메서드 이렇게 두는 것 괜찮은지?
+                senderCell.setButtonStatus(isSaved: self.viewModel.getNumberSaved(row: indexPath.row))
+            case .failure(let error): // 에러 처리
+                switch error {
+                case .duplicationError:
+                    showAlert(title: "알림", message: "이미 저장된 번호입니다.", cancelButtonUse: false)
+                    break
+                case .overError:
+                    showAlert(title: "알림", message: "저장된 번호가 10개입니다.", cancelButtonUse: false)
+                    break
+                }
+            }
         }
         
+        // MARK: 셀 재사용시 마다 '번호 저장 상태' 설정 (하트 표시 유무)
+        // 셀 메서드 호출마다 현재 화면의 번호가 저장 상태인지 확인해서 하트 표시
+        cell.setButtonStatus(isSaved: viewModel.isBookmarkNumbers(numbers: numbers))
         
+        if !viewModel.isBookmarkNumbers(numbers: numbers) {
+            viewModel.isBookmarkUnsavedToggle(row: indexPath.row)
+        }
         return cell
     }
-    
     
 }
