@@ -14,6 +14,7 @@
 		965853DC2B30E4F4007DE9A9 /* AddNumbersCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 965853DB2B30E4F4007DE9A9 /* AddNumbersCollectionViewCell.swift */; };
 		965853DE2B30E57D007DE9A9 /* NumSelectListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 965853DD2B30E57D007DE9A9 /* NumSelectListTableViewCell.swift */; };
 		965853E12B30E6B3007DE9A9 /* NumberSaveViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 965853E02B30E6B3007DE9A9 /* NumberSaveViewModel.swift */; };
+		965FDCEC2B33DEEA004593BC /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 965FDCEB2B33DEEA004593BC /* Observable.swift */; };
 		9668055C2B2A567800480B40 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9668055B2B2A567800480B40 /* AppDelegate.swift */; };
 		9668055E2B2A567800480B40 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9668055D2B2A567800480B40 /* SceneDelegate.swift */; };
 		966805602B2A567800480B40 /* ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9668055F2B2A567800480B40 /* ContainerViewController.swift */; };
@@ -39,6 +40,7 @@
 		965853DB2B30E4F4007DE9A9 /* AddNumbersCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNumbersCollectionViewCell.swift; sourceTree = "<group>"; };
 		965853DD2B30E57D007DE9A9 /* NumSelectListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumSelectListTableViewCell.swift; sourceTree = "<group>"; };
 		965853E02B30E6B3007DE9A9 /* NumberSaveViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberSaveViewModel.swift; sourceTree = "<group>"; };
+		965FDCEB2B33DEEA004593BC /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
 		966805582B2A567800480B40 /* LottoGameMVVM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LottoGameMVVM.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9668055B2B2A567800480B40 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9668055D2B2A567800480B40 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -104,6 +106,14 @@
 			path = SubViews;
 			sourceTree = "<group>";
 		};
+		965FDCEA2B33DEC6004593BC /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				965FDCEB2B33DEEA004593BC /* Observable.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
 		9668054F2B2A567800480B40 = {
 			isa = PBXGroup;
 			children = (
@@ -124,6 +134,7 @@
 			isa = PBXGroup;
 			children = (
 				9625BDE22B2C15EF007457C2 /* Question */,
+				965FDCEA2B33DEC6004593BC /* Utils */,
 				966805722B2A584400480B40 /* APIService */,
 				966805712B2A581800480B40 /* Models */,
 				966805702B2A580E00480B40 /* ViewModels */,
@@ -306,6 +317,7 @@
 				965853D82B30E342007DE9A9 /* MyNumbersViewController.swift in Sources */,
 				9625BDE12B2C11BB007457C2 /* NumTableViewCell.swift in Sources */,
 				966805742B2AAC5500480B40 /* NumberGen.swift in Sources */,
+				965FDCEC2B33DEEA004593BC /* Observable.swift in Sources */,
 				9668055C2B2A567800480B40 /* AppDelegate.swift in Sources */,
 				965853DC2B30E4F4007DE9A9 /* AddNumbersCollectionViewCell.swift in Sources */,
 				9668055E2B2A567800480B40 /* SceneDelegate.swift in Sources */,

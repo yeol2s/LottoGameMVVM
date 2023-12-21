@@ -19,17 +19,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let tabBarVC = UITabBarController() // 탭바 컨트롤러 생성
         
-        //let containerVC = ContainerViewController() // 컨테이너 뷰컨트롤러 인스턴스 생성
+        let containerVC = ContainerViewController() // 컨테이너 뷰컨트롤러 인스턴스 생성
         // 테스트뷰컨
-        let testVC = NumbersGenViewController()
+        //let testVC = NumbersGenViewController()
+        //let testVC = LottoAPIViewController()
         let secondVC = UINavigationController(rootViewController: MyNumbersViewController()) // '내 번호' 뷰컨트롤러 인스턴스 및 네비컨트롤러 생성
         
-        //tabBarVC.setViewControllers([containerVC, secondVC], animated: false) // 탭바 설정
-        tabBarVC.setViewControllers([testVC, secondVC], animated: false) // 테스트 설정
+        tabBarVC.setViewControllers([containerVC, secondVC], animated: false) // 탭바 설정
+        //tabBarVC.setViewControllers([testVC, secondVC], animated: false) // 테스트 설정
         tabBarVC.modalPresentationStyle = .fullScreen
         tabBarVC.tabBar.backgroundColor = .white
-        //containerVC.tabBarItem = UITabBarItem(title: "메인 화면", image: UIImage(systemName: "house.fill"), selectedImage: nil)
-        testVC.tabBarItem = UITabBarItem(title: "메인 화면", image: UIImage(systemName: "house.fill"), selectedImage: nil) // 테스트
+        containerVC.tabBarItem = UITabBarItem(title: "메인 화면", image: UIImage(systemName: "house.fill"), selectedImage: nil)
+        //testVC.tabBarItem = UITabBarItem(title: "메인 화면", image: UIImage(systemName: "house.fill"), selectedImage: nil) // 테스트
         secondVC.tabBarItem = UITabBarItem(title: "내 번호", image: UIImage(systemName: "heart.fill"), selectedImage: nil)
     
         // 기본 rootView 탭바로 설정

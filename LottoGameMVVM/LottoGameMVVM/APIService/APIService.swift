@@ -8,46 +8,37 @@
 import Foundation
 
 // MARK: - API 통신하는 네트워크 서비스
-
-struct APIService {
+// 싱글톤으로 구현(현재는 하나의 객체에서만 접근해서 굳이 싱글톤 패턴을 사용할 이유 없지만 공부를 위해 싱글톤 패턴으로 구현 사용)
+final class APIService {
     
-    private let lottoURL = "https://www.dhlottery.co.kr/common.do?method=getLottoNumber&drwNo=" // 동행복권 URL+(=회차입력)
+    static let shared = APIService() // 싱글톤 선언
+    private init() {}
     
-    // URL 통신 메서드(round는 회차입력)
-    func fechLotto(round: Int, completion: @escaping (LottoInfo?) -> Void) {
+    // URL 통신 메서드(round는 회차입력) Result 타입으로 콜백
+    func fechLotto(round: Int, completion: @escaping (Result<LottoInfo, NetworkError>) -> Void) {
+        let lottoURL = "https://www.dhlottery.co.kr/common.do?method=getLottoNumber&drwNo=" // 동행복권 URL+(=회차입력)
         let urlString = "\(lottoURL)\(String(round))"
+        guard let url = URL(string: urlString) else { return } // URL 구조체 만들기
         
-    }
-    
-    private func performRequest(with urlString: String, completion: @escaping (LottoInfo?) -> Void) {
-        
-        // 1. URL 구조체 만들기
-        guard let url = URL(string: urlString) else { return }
-        
-        // 2. URLSession 만들기(네트워킹을 하는 객체 - 브라우저같은 역할)
-        let session = URLSession(configuration: .default)
-        
-        // 3. 세션에 작업 부여(dataTask는 비동기적으로 동작)
-        let task = session.dataTask(with: url) { (data, response, error) in
-            // 일단 에러의 경우부터 처리
+        // URLSession 만들기 + 작업부여 동시
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
             if error != nil {
-                completion(nil)
+                completion(.failure(.networkingError))
                 return
             }
             // data가 바인딩에 실패했다면 nil 콜백 / 성공하면 가드문 아래로 진행
             guard let safeData = data else {
-                completion(nil)
+                completion(.failure(.dataError))
                 return
             }
             
             // 데이터 분석
             if let lottoInfo = self.parseJSON(safeData) {
-                completion(lottoInfo)
+                completion(.success(lottoInfo))
             } else {
-                completion(nil)
+                completion(.failure(.parseError))
             }
-        }
-        task.resume() // task 작업 시작(일시정지된 상태로 resume을 호출해야 작업이 시작됨)
+        }.resume() // task 작업 시작(일시정지된 상태로 resume을 호출해야 작업이 시작됨)
     }
     
     // JSON 데이터 파싱 메서드(데이터를 받아서 LottoInfo 구조체 형태로 리턴)
@@ -84,6 +75,5 @@ struct APIService {
         return "\(number)" // 변환 실패시, 기본 문자열로 반환
     }
 }
-
 
 

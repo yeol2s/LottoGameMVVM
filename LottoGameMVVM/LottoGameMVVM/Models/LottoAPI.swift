@@ -39,15 +39,32 @@ struct LottoInfo {
     let numbers: [Int]? // 배열로 받아옴
     let bnusNum: Int? // 보너스 번호
 
-    init(drawData: String, drwNo: Int, firstWinMoney: String, firstTicketsCount: Int, numbers: [Int], bnusNum: Int) {
+    // ❓❓❓ 아래 언래핑하는 부분 괜찮은 코드일까
+    init(drawData: String?, drwNo: Int?, firstWinMoney: String?, firstTicketsCount: Int?, numbers: [Int]?, bnusNum: Int?) {
+        if let drwNo = drwNo {
+            self.drawNo = String(drwNo) // (당첨회차) 정수->문자열 변환
+        } else {
+            self.drawNo = nil
+        }
+        if let firstTicketsCount = firstTicketsCount {
+            self.firstTicketsCount = String(firstTicketsCount) // (당첨복권수)정수->문자열 변환
+        } else {
+            self.firstTicketsCount = nil
+        }
         self.drawDate = drawData
-        self.drawNo = String(drwNo) // (당첨회차) 정수->문자열 변환
         self.firstWinMoney = firstWinMoney
-        self.firstTicketsCount = String(firstTicketsCount) // (당첨복권수)정수->문자열 변환
         self.numbers = numbers // 배열로 생성
         self.bnusNum = bnusNum
     }
 }
+
+// MARK: - URL 통신 에러 열거형
+enum NetworkError: Error {
+    case networkingError
+    case dataError
+    case parseError
+}
+
     
     
     
