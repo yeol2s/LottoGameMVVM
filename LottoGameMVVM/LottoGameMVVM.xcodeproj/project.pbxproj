@@ -27,6 +27,10 @@
 		9668057D2B2AC3F900480B40 /* NumbersGenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9668057C2B2AC3F900480B40 /* NumbersGenViewController.swift */; };
 		96786C0E2B33459800D8A218 /* LottoAPIViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96786C0D2B33459800D8A218 /* LottoAPIViewModel.swift */; };
 		96786C102B3345E100D8A218 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96786C0F2B3345E100D8A218 /* APIService.swift */; };
+		96C036562B353C120008A7CF /* QRcodeReaderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C036552B353C120008A7CF /* QRcodeReaderViewController.swift */; };
+		96C036592B353C570008A7CF /* ReaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C036582B353C570008A7CF /* ReaderView.swift */; };
+		96C0365B2B353F450008A7CF /* ReaderStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C0365A2B353F450008A7CF /* ReaderStatus.swift */; };
+		96C0365D2B353FBD0008A7CF /* QRCodeReaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C0365C2B353FBD0008A7CF /* QRCodeReaderViewModel.swift */; };
 		96DC97FC2B329847005CB933 /* LottoAPIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DC97FB2B329847005CB933 /* LottoAPIViewController.swift */; };
 		96DC97FE2B329949005CB933 /* LottoAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DC97FD2B329949005CB933 /* LottoAPI.swift */; };
 		96E515E02B2DF1E600B5E9B3 /* NumberBallListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96E515DF2B2DF1E600B5E9B3 /* NumberBallListViewModel.swift */; };
@@ -55,6 +59,10 @@
 		9668057C2B2AC3F900480B40 /* NumbersGenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumbersGenViewController.swift; sourceTree = "<group>"; };
 		96786C0D2B33459800D8A218 /* LottoAPIViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottoAPIViewModel.swift; sourceTree = "<group>"; };
 		96786C0F2B3345E100D8A218 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
+		96C036552B353C120008A7CF /* QRcodeReaderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRcodeReaderViewController.swift; sourceTree = "<group>"; };
+		96C036582B353C570008A7CF /* ReaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderView.swift; sourceTree = "<group>"; };
+		96C0365A2B353F450008A7CF /* ReaderStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderStatus.swift; sourceTree = "<group>"; };
+		96C0365C2B353FBD0008A7CF /* QRCodeReaderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeReaderViewModel.swift; sourceTree = "<group>"; };
 		96DC97FB2B329847005CB933 /* LottoAPIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottoAPIViewController.swift; sourceTree = "<group>"; };
 		96DC97FD2B329949005CB933 /* LottoAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottoAPI.swift; sourceTree = "<group>"; };
 		96E515DF2B2DF1E600B5E9B3 /* NumberBallListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberBallListViewModel.swift; sourceTree = "<group>"; };
@@ -150,6 +158,7 @@
 			isa = PBXGroup;
 			children = (
 				966805772B2AB06600480B40 /* ContainerVC */,
+				96C036542B353B520008A7CF /* QRCodeReader */,
 				96DC97FA2B3297E6005CB933 /* LottoAPI */,
 				965853D52B30E2F8007DE9A9 /* MyNumbers */,
 				9668057B2B2AC3CF00480B40 /* Main */,
@@ -167,6 +176,7 @@
 				966805752B2AACB100480B40 /* NumberGenViewModel.swift */,
 				965853E02B30E6B3007DE9A9 /* NumberSaveViewModel.swift */,
 				96786C0D2B33459800D8A218 /* LottoAPIViewModel.swift */,
+				96C0365C2B353FBD0008A7CF /* QRCodeReaderViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -176,6 +186,7 @@
 			children = (
 				966805732B2AAC5500480B40 /* NumberGen.swift */,
 				96DC97FD2B329949005CB933 /* LottoAPI.swift */,
+				96C0365A2B353F450008A7CF /* ReaderStatus.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -212,6 +223,23 @@
 				9668057C2B2AC3F900480B40 /* NumbersGenViewController.swift */,
 			);
 			path = Main;
+			sourceTree = "<group>";
+		};
+		96C036542B353B520008A7CF /* QRCodeReader */ = {
+			isa = PBXGroup;
+			children = (
+				96C036572B353C3C0008A7CF /* SubViews */,
+				96C036552B353C120008A7CF /* QRcodeReaderViewController.swift */,
+			);
+			path = QRCodeReader;
+			sourceTree = "<group>";
+		};
+		96C036572B353C3C0008A7CF /* SubViews */ = {
+			isa = PBXGroup;
+			children = (
+				96C036582B353C570008A7CF /* ReaderView.swift */,
+			);
+			path = SubViews;
 			sourceTree = "<group>";
 		};
 		96DC97FA2B3297E6005CB933 /* LottoAPI */ = {
@@ -304,20 +332,24 @@
 				96E515E02B2DF1E600B5E9B3 /* NumberBallListViewModel.swift in Sources */,
 				96786C102B3345E100D8A218 /* APIService.swift in Sources */,
 				966805602B2A567800480B40 /* ContainerViewController.swift in Sources */,
+				96C0365D2B353FBD0008A7CF /* QRCodeReaderViewModel.swift in Sources */,
 				96DC97FE2B329949005CB933 /* LottoAPI.swift in Sources */,
 				96DC97FC2B329847005CB933 /* LottoAPIViewController.swift in Sources */,
 				965853DA2B30E447007DE9A9 /* NumberBallView.swift in Sources */,
 				9668057A2B2AB0A900480B40 /* MenuViewController.swift in Sources */,
 				966805762B2AACB100480B40 /* NumberGenViewModel.swift in Sources */,
+				96C036562B353C120008A7CF /* QRcodeReaderViewController.swift in Sources */,
 				9625BDE42B2C161D007457C2 /* Question.swift in Sources */,
 				96786C0E2B33459800D8A218 /* LottoAPIViewModel.swift in Sources */,
 				965853E12B30E6B3007DE9A9 /* NumberSaveViewModel.swift in Sources */,
 				965853DE2B30E57D007DE9A9 /* NumSelectListTableViewCell.swift in Sources */,
+				96C036592B353C570008A7CF /* ReaderView.swift in Sources */,
 				9668057D2B2AC3F900480B40 /* NumbersGenViewController.swift in Sources */,
 				965853D82B30E342007DE9A9 /* MyNumbersViewController.swift in Sources */,
 				9625BDE12B2C11BB007457C2 /* NumTableViewCell.swift in Sources */,
 				966805742B2AAC5500480B40 /* NumberGen.swift in Sources */,
 				965FDCEC2B33DEEA004593BC /* Observable.swift in Sources */,
+				96C0365B2B353F450008A7CF /* ReaderStatus.swift in Sources */,
 				9668055C2B2A567800480B40 /* AppDelegate.swift in Sources */,
 				965853DC2B30E4F4007DE9A9 /* AddNumbersCollectionViewCell.swift in Sources */,
 				9668055E2B2A567800480B40 /* SceneDelegate.swift in Sources */,

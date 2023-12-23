@@ -22,7 +22,7 @@
 //    
 //    // 뷰컨트롤러들 인스턴스 생성
 //    let menuVC = MenuViewController() // 메뉴뷰컨트롤러
-//    let mainVC = NumberGenerateViewContoller() // 메인뷰컨트롤러(번호 생성화면)
+//    let mainVC = MyNumbersViewController() // 메인뷰컨트롤러(번호 생성화면)
 //    var navVC = UINavigationController? // 네비게이션컨트롤러 인스턴스 생성(메인뷰컨은 컨테이너뷰컨에서 root 시키기 위함)
 //    lazy var apiVC = LottoAPIViewController() // APIViewController(API 접속시 사용을 위해 지연저장속성)
 //    lazy var qrVC = QRCodeReaderViewController() // QRCodeViewController(QR 사용시 사용을 위해 지연저장속성)

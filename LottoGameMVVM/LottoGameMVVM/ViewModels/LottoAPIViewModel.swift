@@ -13,7 +13,7 @@ final class LottoAPIViewModel {
     
     // MARK: - 뷰모델 속성
     
-    // LottoInfo 구조체(모델)를 Observable클래스로 감싸서 인스턴스 생성
+    // (바인딩)LottoInfo 구조체(모델)를 Observable클래스로 감싸서 인스턴스 생성
     // LottoInfo 내부에 있는 데이터가 바뀔때마다 속성감시자가 내부에 있는 클로저를 호출
     var lottoAPI: Observable<LottoInfo> = Observable(LottoInfo(drawData: nil, drwNo: nil, firstWinMoney: nil, firstTicketsCount: nil, numbers: nil, bnusNum: nil)) // 기본적으로 nil로 일단 생성
 
