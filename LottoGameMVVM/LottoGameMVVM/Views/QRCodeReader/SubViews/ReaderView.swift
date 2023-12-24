@@ -15,13 +15,13 @@ final class ReaderView: UIView {
     
     // MARK: - 뷰 속성
     
-    // ⚠️ 일단 보류
-    //weak var delegate: ReaderViewDelegate?
+    // QR코드 뷰컨으로부터 커스텀생성자를 통해 뷰모델을 전달받는다.
+    private var viewModel: QRCodeReaderViewModel
     
     // 카메라 화면 보여주는 Layer
     // AVCaptureSession은 캡처할 미디어의 설정과 캡처를 시작하고 관리, AVCaputureVideoPreviewLayer는 캡처 세션으로 부터 받은 비디오를 화면에 보여주는 역할
-    var previewLayer: AVCaptureVideoPreviewLayer?
-    var captureSession: AVCaptureSession?
+    private var previewLayer: AVCaptureVideoPreviewLayer?
+    private var captureSession: AVCaptureSession?
     
     // 카메라 앵글 테두리 레이어 설정
     private var cornerLength: CGFloat = 20 // 모서리
@@ -45,13 +45,22 @@ final class ReaderView: UIView {
     
     // MARK: - 뷰 생성자
     
+    // 재정의 생성자
     override init(frame: CGRect) {
-        super.init(frame: frame)
+        self.viewModel = QRCodeReaderViewModel()
+        super.init(frame: frame) // 저장속성을 모두 초기화 한 후 상위생성자를 호출해야 함.
         self.setupView()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    // 커스텀 생성자 구현(뷰모델과 같이 생성)
+    init(frame: CGRect, viewModel: QRCodeReaderViewModel) {
+        self.viewModel = viewModel // 현재 단계의 속성을 초기화 하고
+        super.init(frame: frame) // 상위 생성자를 호출한다.
+        self.setupView()
     }
     
     // MARK: - 뷰 UI 설정 메서드
@@ -236,16 +245,19 @@ extension ReaderView {
     // 델리게이트에게 중지, 성공, 실패 상태를 알려줌
     func stop() {
         self.captureSession?.stopRunning() // 캡처세션 중지
-        self.delegate?.rederComplete(status: .stop) // 델리게이트 메서드에 스탑(열거형)-Bool 전달)
+        viewModel.setReaderStatus(.stop)
+        //self.delegate?.rederComplete(status: .stop) // 델리게이트 메서드에 스탑(열거형)-Bool 전달)
     }
     
     func fail() {
-        self.delegate?.rederComplete(status: .fail)
+        viewModel.setReaderStatus(.fail)
+        //self.delegate?.rederComplete(status: .fail)
         self.captureSession = nil
     }
     
     func found(code: String) { // QR 코드를 성공적으로 읽었을 때 호출.
-        self.delegate?.rederComplete(status: .sucess(code))
+        viewModel.setReaderStatus(.sucess(code))
+        //self.delegate?.rederComplete(status: .sucess(code))
     }
 }
 

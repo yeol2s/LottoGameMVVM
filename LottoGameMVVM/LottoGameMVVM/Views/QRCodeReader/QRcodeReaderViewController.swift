@@ -13,9 +13,9 @@ final class QRcodeReaderViewController: UIViewController {
     
     // MARK: - 뷰 컨트롤러 속성
     
-    var viewModel: QRCodeReaderViewModel = QRCodeReaderViewModel()
+    private var viewModel: QRCodeReaderViewModel = QRCodeReaderViewModel()
     
-    var readerView: ReaderView!
+    private var readerView: ReaderView!
     
     lazy var stopButton: UIButton = {
         let button = UIButton()
@@ -32,6 +32,7 @@ final class QRcodeReaderViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupReaderView() // 리더뷰 호출 및 하위뷰 추가
+        
     }
     
     // 뷰가 스크린에 나타나기 전(뷰가 화면에 나타날때마다 계속 호출)
@@ -53,7 +54,7 @@ final class QRcodeReaderViewController: UIViewController {
     // MARK: - 뷰 설정 및 오토레이아웃
 
     private func setupReaderView() {
-        readerView = viewModel.getReaderView(frame: view.bounds) // 뷰모델의 리더뷰 인스턴스와 동일한 주소를 참조전달 받음
+        readerView = viewModel.getReaderView(frame: view.bounds) // 뷰모델의 리더뷰 인스턴스와 동일한 주소를 참조전달 받음(뷰모델까지 가리키는 인스턴스가 생성되서 전달됨)
         view.addSubview(readerView)
     }
     
@@ -74,5 +75,25 @@ final class QRcodeReaderViewController: UIViewController {
     @objc private func qrCancelButtonTapped() {
         dismiss(animated: true)
     }
+    
+    // 뷰모델과 바인딩(클로저로 ReaderStatus 값이 변경될때 호출될 클로저를 Observable클로저에 넣어줌)
+    private func setupViewBind() {
+        viewModel.readerStatus.subscribe { readerStatus in
+            switch readerStatus {
+            case .sucess(let code):
+                if let code = code {
+                    
+                } else {
+                    
+                }
+            case .fail:
+                break
+            case .stop:
+                break
+            }
+        }
+    }
+    
+    
 
 }
