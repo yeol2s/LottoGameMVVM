@@ -66,13 +66,7 @@ final class NumbersGenViewController: UIViewController {
         setupTableViewConstraints() // 테이블뷰 오토레이아웃
         setupGenButtonConstraints() // 생성 버튼 오토레이아웃
         resetButtonConstraints() // 리셋 버튼 오토레이아웃
-        
-        // 뷰모델의 Alert 설정 클로저에 할당
-        // 뷰모델에서 클로저를 호출시면서 alert 설정한 정보를 status로 받음(title, message, button 튜플)
-        // 이 할당된 클로저는 뷰모델에서 alertSet 속성이 변경되었을때 속성감시자를 통해 호출될 것(여기선 할당만)
-        viewModel.showAlertClosure = { [weak self] status in
-            self?.showAlert(title: status.title, message: status.message, cancelButtonUse: status.cancelButtonUse) // showAlert 메서드를 호출하면서 데이터를 전달해서 Alert 실행
-        }
+        setupViewModelAlert() // 뷰모델 Alert 클로저 할당
     }
     
     // (뷰컨 생명주기)뷰가 나타날때마다 호출(뷰가 나타나기 전)
@@ -149,14 +143,16 @@ final class NumbersGenViewController: UIViewController {
         
     }
     
-    // MARK: - Input 관련 메서드
- 
+
+    
+    // MARK: - Input 관련 메서드(내부로직 포함)
+    
     // 번호 생성버튼 셀렉터 메서드(뷰모델에게 전달)
     @objc private func genButtonTapped() {
         
         viewModel.generateNumbersTapped() // 뷰모델에서 판단 후 생성 or Alert 처리
         numTableView.reloadData()
-
+        
     }
     
     // 번호 리셋버튼 셀렉터 메서드(뷰모델에게 전달)
@@ -167,10 +163,19 @@ final class NumbersGenViewController: UIViewController {
         
     }
     
+    // 뷰모델의 Alert 설정 클로저에 할당
+    private func setupViewModelAlert() {
+        // 뷰모델에서 클로저를 호출시면서 alert 설정한 정보를 status로 받음(title, message, button 튜플)
+        // 이 할당된 클로저는 뷰모델에서 alertSet 속성이 변경되었을때 속성감시자를 통해 호출될 것(여기선 할당만)
+        viewModel.showAlertClosure = { [weak self] status in
+            self?.showAlert(title: status.title, message: status.message, cancelButtonUse: status.cancelButtonUse) // showAlert 메서드를 호출하면서 데이터를 전달해서 Alert 실행
+        }
+    }
+    
     //❓❓❓ Alert 이렇게 처리하는거 괜찮은건지(뭔가 어거지 느낌이 강해짐)
     // Alert 메서드('확인' 버튼만 구현할 것인지? '취소' 버튼까지 추가 구현할 것인지? -> Bool 여부에 따라 결정)
     // title, message는 호출과 함께 전달
-    func showAlert(title: String , message: String, cancelButtonUse: Bool) {
+    private func showAlert(title: String , message: String, cancelButtonUse: Bool) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         if cancelButtonUse { // '취소' 버튼 사용(Dual)
             let okAction = UIAlertAction(title: "확인", style: .default) { _ in

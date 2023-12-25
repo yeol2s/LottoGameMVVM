@@ -20,8 +20,8 @@ final class ReaderView: UIView {
     
     // 카메라 화면 보여주는 Layer
     // AVCaptureSession은 캡처할 미디어의 설정과 캡처를 시작하고 관리, AVCaputureVideoPreviewLayer는 캡처 세션으로 부터 받은 비디오를 화면에 보여주는 역할
-    private var previewLayer: AVCaptureVideoPreviewLayer?
-    private var captureSession: AVCaptureSession?
+    var previewLayer: AVCaptureVideoPreviewLayer?
+    var captureSession: AVCaptureSession?
     
     // 카메라 앵글 테두리 레이어 설정
     private var cornerLength: CGFloat = 20 // 모서리
@@ -240,9 +240,6 @@ extension ReaderView {
         self.captureSession?.startRunning() // 캡처세션 시작
     }
     
-    // // ⚠️ 델리게이트는 일단 보류 
-    // QR 읽고나서 사용되는 메서드들?
-    // 델리게이트에게 중지, 성공, 실패 상태를 알려줌
     func stop() {
         self.captureSession?.stopRunning() // 캡처세션 중지
         viewModel.setReaderStatus(.stop)
@@ -278,7 +275,7 @@ extension ReaderView: AVCaptureMetadataOutputObjectsDelegate {
                   let stringValue = readableObject.stringValue else { return }
             
             AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate)) // 진동을 울림
-            //AudioServicesPlayAlertSound(SystemSoundID(1407)) // 이건 사운드인가?
+            //AudioServicesPlayAlertSound(SystemSoundID(1407)) // 이건 사운드
             found(code: stringValue) // QR코드를 성공적으로 읽었을때 호출되는 found
             print("Found metadata Value: \n \(stringValue)")
             stop() // 위 동작들 완료되면 캡처세션 중지

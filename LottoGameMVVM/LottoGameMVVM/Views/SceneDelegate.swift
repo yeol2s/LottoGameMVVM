@@ -21,7 +21,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         //let containerVC = ContainerViewController() // 컨테이너 뷰컨트롤러 인스턴스 생성
         // 테스트뷰컨
-        let testVC = NumbersGenViewController()
+        let testVC = QRcodeReaderViewController()
         //let testVC = LottoAPIViewController()
         let secondVC = UINavigationController(rootViewController: MyNumbersViewController()) // '내 번호' 뷰컨트롤러 인스턴스 및 네비컨트롤러 생성
         

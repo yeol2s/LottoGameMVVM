@@ -32,7 +32,9 @@ final class QRcodeReaderViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupReaderView() // 리더뷰 호출 및 하위뷰 추가
-        
+        buttonConstraints() // 버튼 오토레이아웃
+        setupViewBind() // 뷰모델 바인딩 설정(Observable)
+        setupViewModelAlert() // 뷰모델 Alert 설정(클로저 할당)
     }
     
     // 뷰가 스크린에 나타나기 전(뷰가 화면에 나타날때마다 계속 호출)
@@ -76,24 +78,72 @@ final class QRcodeReaderViewController: UIViewController {
         dismiss(animated: true)
     }
     
+    // 뷰모델 Alert 클로저 할당
+    private func setupViewModelAlert() {
+        viewModel.showAlertClosure = { [weak self] status in
+            self?.showAlert(title: status.title, message: status.message, cancelButtonUse: status.cancelButtonUse)
+        }
+    }
+    
     // 뷰모델과 바인딩(클로저로 ReaderStatus 값이 변경될때 호출될 클로저를 Observable클로저에 넣어줌)
     private func setupViewBind() {
-        viewModel.readerStatus.subscribe { readerStatus in
+        viewModel.readerStatus.subscribe { [weak self] readerStatus in
             switch readerStatus {
             case .sucess(let code):
                 if let code = code {
-                    
+                    self?.viewModel.alertPerformAction(title: "인식 성공", message: "사이트에 연결합니다.", code, cancelButtonUse: true)
+                    // 성공시에도 리더뷰에서 메타데이터 처리하는 과정에서 마지막에 stop() 메서드가 실행되면서 ReaderStatus가 stop으로 변경되면서 캡처세션 중지됨(고로 따로 중지메서드 적용안함)
                 } else {
-                    
+                    fallthrough // code 못불러올시 다음블럭 실행
                 }
             case .fail:
-                break
+                self?.viewModel.alertPerformAction(title: "인식 실패", message: "인식에 실패했습니다.", cancelButtonUse: false)
+                self?.captureSessionRetry() // 캡처세션 재시작
             case .stop:
+                // ⚠️ 중지에 대한 처리는 일단 보류(인식 성공 후에도 데이터처리 후 stop이 실행됨)
                 break
             }
         }
     }
     
+    // Alert 메서드
+    private func showAlert(title: String, message: [String], cancelButtonUse: Bool ) {
+        
+        let alert = UIAlertController(title: title, message: message[0], preferredStyle: .alert)
+        if cancelButtonUse { // '취소' 버튼 사용(Dual)
+            let okAction = UIAlertAction(title: "확인", style: .default) { _ in
+                if title == "인식 성공" {
+                    self.alertHandlerAction(title: title, message: message[1]) // 핸들러 처리
+                }
+            }
+            let cancelAction = UIAlertAction(title: "취소", style: .default)
+            alert.addAction(okAction)
+            alert.addAction(cancelAction)
+        } else { // '확인' 버튼만 사용(Single)
+            let okAction = UIAlertAction(title: "확인", style: .default)
+            alert.addAction(okAction)
+        }
+        present(alert, animated: true)
+    }
     
+    // Alert 핸들러 메서드
+    private func alertHandlerAction(title status: String, message: String) {
+        
+        switch status {
+        case "인식 성공":
+            if let url = URL(string: message) {
+                UIApplication.shared.open(url) // 동행복권 웹사이트 연결
+            } else {
+                captureSessionRetry() // 캡처세션 재시작
+            }
+        default:
+            break
+        }
+    }
+    
+    // 뷰모델에게 캡처세션 재시작 요청
+    private func captureSessionRetry() {
+        viewModel.setCaptureSessionRetry()
+    }
 
 }
