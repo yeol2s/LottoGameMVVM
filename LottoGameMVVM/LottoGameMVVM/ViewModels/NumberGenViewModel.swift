@@ -8,7 +8,7 @@
 // 📌 Foundation으로 뷰모델에 UIKit 코드없는 것 확인
 import Foundation
 
-// MARK: - 메인 뷰컨트롤러 델리게이트 패턴(컨테이너뷰컨과 통신을 위해)
+// MARK: - 메인 뷰컨트롤러 델리게이트 프로토콜(컨테이너뷰컨과 통신을 위해)
 // 탭을 눌렀을때 전달을 위한 프로토콜
 protocol NumberGenViewControllerDelegate: AnyObject { // AnyObject로 클래스타입만
     func didTapMenuButton() // (요구사항 메서드)메뉴 버튼 누를시

@@ -61,7 +61,7 @@ final class NumbersGenViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         
-        //setupNaviBar() // 네비게이션바 설정 메서드 호출(컨테이너뷰컨에서 네비컨트롤러 생성)
+        setupNaviBar() // 네비게이션바 설정 메서드 호출(컨테이너뷰컨에서 네비컨트롤러 생성)
         setupTableView() // 테이블뷰 대리자 지정 설정 및 셀등록 함수 호출
         setupTableViewConstraints() // 테이블뷰 오토레이아웃
         setupGenButtonConstraints() // 생성 버튼 오토레이아웃

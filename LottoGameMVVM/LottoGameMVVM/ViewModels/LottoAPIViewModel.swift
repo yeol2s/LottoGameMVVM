@@ -72,15 +72,12 @@ final class LottoAPIViewModel {
         // (현재날짜와 시간이)토요일인 경우 다음 회차로 이동
         if currentWeekday == 7 {
             if currentHour >= 21 {
-                print("토요일 9시 이후: \(weeksBetween + 1)")
                 return weeksBetween + 1 // 토요일 저녁 9시 이후라면 다음 회차로 진행
             } else {
-                print("토요일 9시 이전: \(weeksBetween)")
                 return weeksBetween // 토요일 저녁 9시 이전이라면 현재 회차로 진행
             }
         } else {
             // 토요일이 아닌 경우 다음 회차로 이동
-            print("토요일이 아님: \(weeksBetween + 1)")
             return weeksBetween + 1
         }
     }

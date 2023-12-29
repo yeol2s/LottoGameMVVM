@@ -13,9 +13,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // 앱이 처음 실행될 때 호출되는 메서드(초기 설정 및 초기화 작업을 할 수 있음)
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // ❓❓❓ 유저디폴츠 앱델리게이트에서 미리 싱글톤 생성해주는게 좋은가?
-        // 유저디폴츠 생성
-        let defaults = UserDefaults.standard // 싱글톤 인스턴스(메모리상 유일하게 1개만 존재하는 객체)(한번 생성이후 앱이 종료될때까지 유일한 객체로 메모리 상주)
         
         return true
     }
