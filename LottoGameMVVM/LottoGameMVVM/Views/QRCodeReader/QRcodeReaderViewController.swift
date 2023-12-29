@@ -85,7 +85,7 @@ final class QRcodeReaderViewController: UIViewController {
         }
     }
     
-    // 뷰모델과 바인딩(클로저로 ReaderStatus 값이 변경될때 호출될 클로저를 Observable클로저에 넣어줌)
+    // (바인딩)뷰모델과 바인딩(클로저로 ReaderStatus 값이 변경될때 호출될 클로저를 Observable클로저에 넣어줌)
     private func setupViewBind() {
         viewModel.readerStatus.subscribe { [weak self] readerStatus in
             switch readerStatus {

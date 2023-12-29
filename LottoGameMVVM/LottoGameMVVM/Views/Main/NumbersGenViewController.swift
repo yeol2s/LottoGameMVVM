@@ -18,6 +18,9 @@ final class NumbersGenViewController: UIViewController {
     
     private let numTableView: UITableView = UITableView() // 테이블뷰 생성(번호 10줄)
     
+    var numbers: [[Int]] = [[]]
+    
+    
     // ⭐️ 아래 UI속성들을 lazy var로 선언하는 이유는 -> 뷰 계층이 로드된 시점 이후에 버튼을 초기화 해야 하므로?
     // 뷰가 로드되고 난 후 오토레이아웃을 설정하는 경우에 해당(컴파일시 메모리에 동시에 올라가므로 순서가 필요한 것)
     // 번호 생성 버튼
@@ -67,6 +70,7 @@ final class NumbersGenViewController: UIViewController {
         setupGenButtonConstraints() // 생성 버튼 오토레이아웃
         resetButtonConstraints() // 리셋 버튼 오토레이아웃
         setupViewModelAlert() // 뷰모델 Alert 클로저 할당
+        setupBindViewModel() // (바인딩) 뷰모델 바인딩(테이블뷰)
     }
     
     // (뷰컨 생명주기)뷰가 나타날때마다 호출(뷰가 나타나기 전)
@@ -143,7 +147,7 @@ final class NumbersGenViewController: UIViewController {
         
     }
     
-
+    
     
     // MARK: - Input 관련 메서드(내부로직 포함)
     
@@ -151,13 +155,13 @@ final class NumbersGenViewController: UIViewController {
     @objc private func genButtonTapped() {
         
         viewModel.generateNumbersTapped() // 뷰모델에서 판단 후 생성 or Alert 처리
-        numTableView.reloadData()
+        //numTableView.reloadData()
         
     }
     
     // 번호 리셋버튼 셀렉터 메서드(뷰모델에게 전달)
     @objc private func resetButtonTapped() {
-        guard !viewModel.numbers.isEmpty else { return } // 번호가 생성되어 있을때만 실행되도록 가드문 처리
+        guard !viewModel.numbers.value.isEmpty else { return } // 번호가 생성되어 있을때만 실행되도록 가드문 처리
         
         viewModel.alertPerformAction(title: "번호 초기화", message: "번호를 초기화 하시겠습니까?", cancelButtonUse: true) // '취소' 버튼 추가해서 Alert 요청해서 핸들러 처리
         
@@ -208,7 +212,16 @@ final class NumbersGenViewController: UIViewController {
         delegate?.didTapMenuButton() // 델리게이트 프로토콜을 준수하는 객체에서만 실행가능한 메서드(해당 프로토콜을 채택하지 않으면 nil이 반환)
     }
     
-    
+    // (바인딩) 번호 생성 Observable 클로저 할당
+    private func setupBindViewModel() {
+        viewModel.numbers.subscribe { [weak self] numbers in
+            DispatchQueue.main.async {
+                print("메인뷰 바인딩 실행")
+                self?.numbers = numbers.map { $0.numbersList } // NumbersGen에서 numberList 배열을 compactMap 고차함수로 추출(옵셔널 자동바인딩)
+                self?.numTableView.reloadData() // 데이터가 추가될때마다 메인뷰컨 테이블뷰 리로드
+            }
+        }
+    }
 }
 
 
@@ -221,6 +234,8 @@ extension NumbersGenViewController: UITableViewDelegate {
 
 // UITableViewDataSource 확장
 extension NumbersGenViewController: UITableViewDataSource {
+    
+    
     // 테이블뷰 몇개의 데이터 표시할건지
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.getNumbersCount()
@@ -230,8 +245,9 @@ extension NumbersGenViewController: UITableViewDataSource {
         let cell = numTableView.dequeueReusableCell(withIdentifier: "NumCell", for: indexPath) as! NumTableViewCell // 재사용 셀 등록
         
         // 📌 getNumbersList 바인딩 해볼 것(데이터 바인딩) - 클로저로 해볼 것
-        let numbers = viewModel.getNumbersList(row: indexPath.row) // 현재 생성된 번호를 index 기준으로 가져와서 담음
-        cell.numbersBallListInsert(numbers: numbers) // 셀에게 번호 전달해서 공 모양의 번호로 표시 (❓❓❓ 이 부분 MVVM 패턴 준수하는건가?)
+        //let numbers = viewModel.getNumbersList(row: indexPath.row) // 현재 생성된 번호를 index 기준으로 가져와서 담음
+        // 📌 (new) 바인딩 적용후 numbers에서 인덱스로 바로 번호가져옴(공 모양 변환위해)
+        cell.numbersBallListInsert(numbers: numbers[indexPath.row]) // 셀에게 번호 전달해서 공 모양의 번호로 표시 (❓❓❓ 이 부분 MVVM 패턴 준수하는건가?)
         cell.selectionStyle = .none // 셀 선택시 회색으로 표시하지 않도록 설정
         
         // MARK: '번호 저장'누를 때 마다 '번호 저장 상태' 설정 (하트 표시 유무)
@@ -240,7 +256,7 @@ extension NumbersGenViewController: UITableViewDataSource {
         cell.saveButtonPressed = { [weak self] senderCell in
             guard let self = self else { return }
             
-            let saveResult = self.viewModel.setNumberSaved(row: indexPath.row) // 번호 저장 메서드 호출 -> Rsult로 리턴
+            let saveResult = self.viewModel.setNumberSaved(row: indexPath.row) // 번호 저장 메서드 호출 -> Result로 리턴
             
             switch saveResult {
             case .success: // 연관값 미사용(void)
@@ -260,11 +276,12 @@ extension NumbersGenViewController: UITableViewDataSource {
         
         // MARK: 셀 재사용시 마다 '번호 저장 상태' 설정 (하트 표시 유무)
         // 셀 메서드 호출마다 현재 화면의 번호가 저장 상태인지 확인해서 하트 표시
-        cell.setButtonStatus(isSaved: viewModel.isBookmarkNumbers(numbers: numbers))
-        
-        if !viewModel.isBookmarkNumbers(numbers: numbers) {
-            viewModel.isBookmarkUnsavedToggle(row: indexPath.row)
-        }
+        // ⚠️(리로드 반복으로 잠시 보류)
+//        cell.setButtonStatus(isSaved: viewModel.isBookmarkNumbers(numbers: numbers))
+//        
+//        if !viewModel.isBookmarkNumbers(numbers: numbers) {
+//            viewModel.isBookmarkUnsavedToggle(row: indexPath.row)
+//        }
         return cell
     }
     

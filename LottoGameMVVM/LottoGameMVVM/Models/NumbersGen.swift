@@ -17,7 +17,7 @@ struct NumbersGen {
     
     // 번호 저장여부를 여기에 저장시킴(테이블뷰 셀 리로드시 불러오기 위해)
     var isSaved: Bool = false
-
+    
 }
 
 
