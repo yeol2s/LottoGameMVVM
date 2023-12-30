@@ -31,8 +31,6 @@ final class QRcodeReaderViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupReaderView() // 리더뷰 호출 및 하위뷰 추가
-        buttonConstraints() // 버튼 오토레이아웃
         setupViewBind() // 뷰모델 바인딩 설정(Observable)
         setupViewModelAlert() // 뷰모델 Alert 설정(클로저 할당)
     }
@@ -43,6 +41,9 @@ final class QRcodeReaderViewController: UIViewController {
         super.viewWillAppear(animated)
         self.tabBarController?.tabBar.isHidden = true // 탭바 숨기기
         
+        // 뷰가 다시 켜질때마다 셋업하기 위해
+        setupReaderView() // 리더뷰 호출 및 하위뷰 추가
+        buttonConstraints() // 버튼 오토레이아웃
     }
     
     // 뷰가 사라지기 전
@@ -51,11 +52,16 @@ final class QRcodeReaderViewController: UIViewController {
         super.viewWillDisappear(animated)
         self.tabBarController?.tabBar.isHidden = false // 탭바 보여주기
         
+        if readerView.isRunning { // 뷰가 사라질때 캡처세션이 실행중이라면
+            print("viewWillDisappear:캡처세션 종료")
+            readerView.stop() // 캡처세션 종료
+        }
     }
     
     // MARK: - 뷰 설정 및 오토레이아웃
 
     private func setupReaderView() {
+        print("호출됐다")
         readerView = viewModel.getReaderView(frame: view.bounds) // 뷰모델의 리더뷰 인스턴스와 동일한 주소를 참조전달 받음(뷰모델까지 가리키는 인스턴스가 생성되서 전달됨)
         view.addSubview(readerView)
     }
@@ -100,7 +106,8 @@ final class QRcodeReaderViewController: UIViewController {
                 self?.viewModel.alertPerformAction(title: "인식 실패", message: "인식에 실패했습니다.", cancelButtonUse: false)
                 self?.captureSessionRetry() // 캡처세션 재시작
             case .stop:
-                // ⚠️ 중지에 대한 처리는 일단 보류(인식 성공 후에도 데이터처리 후 stop이 실행됨)
+                // ⚠️ 중지에 대한 처리는 일단 보류(인식 성공 후에 데이터처리 후 stop이 실행됨)
+                // ❓❓❓ 어떻게 처리하는게 효율적일까.
                 break
             }
         }
@@ -116,7 +123,9 @@ final class QRcodeReaderViewController: UIViewController {
                     self.alertHandlerAction(title: title, message: message[1]) // 핸들러 처리
                 }
             }
-            let cancelAction = UIAlertAction(title: "취소", style: .default)
+            let cancelAction = UIAlertAction(title: "취소", style: .default) { _ in
+                self.captureSessionRetry() // 캡처세션 재시작
+            }
             alert.addAction(okAction)
             alert.addAction(cancelAction)
         } else { // '확인' 버튼만 사용(Single)

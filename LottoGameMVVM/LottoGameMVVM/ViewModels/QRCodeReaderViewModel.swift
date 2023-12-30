@@ -36,6 +36,7 @@ final class QRCodeReaderViewModel {
     
     // MARK: - Output
     
+    // 뷰컨에서 호출
     func getReaderView(frame: CGRect) -> ReaderView {
         self.readerView = ReaderView(frame: frame, viewModel: self) // 리더뷰 인스턴스 생성과 함께 뷰모델을 전달(커스텀 생성자)
         return readerView // 생성된 리더뷰 인스턴스의 주소값 전달되는 것

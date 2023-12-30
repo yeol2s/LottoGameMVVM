@@ -77,6 +77,7 @@ final class NumbersGenViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         numTableView.reloadData()
+        setBookmarkStatusCheck()
     }
     
     
@@ -217,10 +218,15 @@ final class NumbersGenViewController: UIViewController {
         viewModel.numbers.subscribe { [weak self] numbers in
             DispatchQueue.main.async {
                 print("메인뷰 바인딩 실행")
-                self?.numbers = numbers.map { $0.numbersList } // NumbersGen에서 numberList 배열을 compactMap 고차함수로 추출(옵셔널 자동바인딩)
+                self?.numbers = numbers.map { $0.numbersList } // NumbersGen에서 numberList 배열을 map 추출
                 self?.numTableView.reloadData() // 데이터가 추가될때마다 메인뷰컨 테이블뷰 리로드
             }
         }
+    }
+    
+    // 저장 상태 확인해서 저장되어있지 않다면 현재의 번호의 isSaved 상태를 false로 변경
+    private func setBookmarkStatusCheck() {
+        viewModel.isBookmarkUnsavedCheck()
     }
 }
 
@@ -276,10 +282,11 @@ extension NumbersGenViewController: UITableViewDataSource {
         
         // MARK: 셀 재사용시 마다 '번호 저장 상태' 설정 (하트 표시 유무)
         // 셀 메서드 호출마다 현재 화면의 번호가 저장 상태인지 확인해서 하트 표시
-        // ⚠️(리로드 반복으로 잠시 보류)
-//        cell.setButtonStatus(isSaved: viewModel.isBookmarkNumbers(numbers: numbers))
-//        
-//        if !viewModel.isBookmarkNumbers(numbers: numbers) {
+        cell.setButtonStatus(isSaved: viewModel.isBookmarkNumbers(numbers: numbers[indexPath.row]))
+        print(viewModel.numbers.value[indexPath.row].isSaved)
+
+        // ⚠️(리로드 반복으로 보류)
+//        if !viewModel.isBookmarkNumbers(numbers: numbers[indexPath.row]) {
 //            viewModel.isBookmarkUnsavedToggle(row: indexPath.row)
 //        }
         return cell

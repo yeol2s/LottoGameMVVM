@@ -143,69 +143,84 @@ final class NumberGenViewModel {
     func getNumbersCount() -> Int {
         return numbers.value.count
     }
-  
+    
     // (Old) 바인딩으로 변환
-//    // 생성된 번호 indexPath에 맞춰 (뷰의)테이블뷰에 전달
-//    func getNumbersList(row: Int) -> [Int] {
-//        return numbers.value[row].numbersList
-//    }
-
-
-// (저장 확인) 테이블뷰에게 전달하기 위한 현재 저장 상태 확인 메서드
-func getNumberSaved(row: Int) -> Bool {
-    let isSaved = numbers.value[row].isSaved // number 구조체 배열의 현재 저장 상태를 전달
-    return isSaved
-}
-
-// (번호 저장) 번호 생성화면에서 번호를 유저디폴츠와 현재 번호와 비교해서 있는지 없는지 확인
-// 생성 화면에서 번호 저장 후 '내 번호' 화면에서 번호 저장을 해제했을 때 생성 화면에서도 해당 번호의 하트가 지워지도록.
-// 테이블뷰 메서드에서 셀을 다시 그릴때마다 확인(Bool 리턴)
-func isBookmarkNumbers(numbers: [Int]) -> Bool {
-    if let saveData = userDefaults.array(forKey: saveKey) as? [[Int]] {
-        if saveData.contains(numbers) {
-            return true
-        }
-    }
-    return false
-}
-// (번호 저장) isBookmarkNumbers 메서드에서 false 반환시 테이블뷰 셀 메서드에서 indexPath를 가지고 해당 번호의 isSaved를 false로 변경
-// ⚠️여기서 리로드 오류 발생(토글을 계속하니까 바인딩 클로저가 계속 반복)
-func isBookmarkUnsavedToggle(row: Int) {
-    numbers.value[row].isSaved = false
-}
-
-
-
-
-// MARK: - 뷰모델 내부 로직들
-
-
-// (유저디폴츠)번호 저장 메서드(하트 선택)
-private func userSaveSelectDataAdd(row: Int) {
-    defaultsTemp.removeAll() // (유저디폴츠)임시배열 초기화
+    //    // 생성된 번호 indexPath에 맞춰 (뷰의)테이블뷰에 전달
+    //    func getNumbersList(row: Int) -> [Int] {
+    //        return numbers.value[row].numbersList
+    //    }
     
-    if let saveData = userDefaults.array(forKey: saveKey) as? [[Int]] {
-        defaultsTemp = saveData // 유저디폴츠 데이터를 일단 임시 저장 배열에 넣어주고
+    
+    // (저장 확인) 테이블뷰에게 전달하기 위한 현재 저장 상태 확인 메서드
+    func getNumberSaved(row: Int) -> Bool {
+        let isSaved = numbers.value[row].isSaved // number 구조체 배열의 현재 저장 상태를 전달
+        return isSaved
     }
     
-    defaultsTemp.append(numbers.value[row].numbersList) // 선택된 번호 배열을 추가
-    userDefaults.setValue(defaultsTemp, forKey: saveKey) // 유저디폴츠에 임시 저장된 배열로 다시 설정
-}
-
-// (유저디폴츠)저장된 번호 삭제 메서드(하트 선택 해제)
-private func userSavedSelectRemove(row: Int) {
-    if let saveData = userDefaults.array(forKey: saveKey) as? [[Int]] {
-        for value in saveData { // 유저디폴츠 데이터로 반복문 돌려서
-            if numbers.value[row].numbersList == value { // 현재 선택해제 된 번호의 값과 같은지 찾고
-                if let index = defaultsTemp.firstIndex(of: value) { // 현재 값이 임시배열에서 몇번째 인덱스값인지 찾고
-                    defaultsTemp.remove(at: index) // 임시배열에서 인덱스 기준으로 삭제
-                }
+    // (번호 저장) 번호 생성화면에서 번호를 유저디폴츠와 현재 번호와 비교해서 있는지 없는지 확인
+    // 생성 화면에서 번호 저장 후 '내 번호' 화면에서 번호 저장을 해제했을 때 생성 화면에서도 해당 번호의 하트가 지워지도록.
+    // 테이블뷰 메서드에서 셀을 다시 그릴때마다 확인(Bool 리턴)
+    func isBookmarkNumbers(numbers: [Int]) -> Bool {
+        if let saveData = userDefaults.array(forKey: saveKey) as? [[Int]] {
+            if saveData.contains(numbers) {
+                return true
             }
         }
-        userDefaults.set(defaultsTemp, forKey: saveKey) // 정리된 상태의 임시배열로 유저디폴츠에 다시 넣어줌
+        return false
     }
-}
-
+    
+    // (번호 저장) isBookmarkNumbers 메서드에서 false 반환시 테이블뷰 셀 메서드에서 indexPath를 가지고 해당 번호의 isSaved를 false로 변경
+    // ⚠️여기서 리로드 오류 발생(토글을 계속하니까 바인딩 클로저가 계속 반복)
+//    func isBookmarkUnsavedToggle(row: Int) {
+//        numbers.value[row].isSaved = false
+//    }
+    
+    // ❓❓❓ 이걸 테이블뷰 메서드에서 실행하지 않고 뷰컨에서 생명주기 메서드에 매 화면마다 실행해서
+    // 처리시킬 건데 이게 괜찮은건지 한번 짚어보자.(한번 불러올때마다 바인딩값이 변경되서 반복횟수만큼 호출됨)
+    // '내 번호' 저장된 번호와 '번호 생성'화면의 번호 비교해서 저장되어 있지 않은 것은 isSaved = false 처리
+    func isBookmarkUnsavedCheck() {
+        // 유저디폴츠 데이터가 담기면 실행
+        guard let saveData = userDefaults.array(forKey: saveKey) as? [[Int]] else { return }
+        
+        for (index, nums) in numbers.value.enumerated() {
+            if !saveData.contains(nums.numbersList) {
+                numbers.value[index].isSaved = false // 포함되어있지 않다면 false 처리
+            }
+        }
+    }
+    
+    
+    
+    
+    // MARK: - 뷰모델 내부 로직들
+    
+    
+    // (유저디폴츠)번호 저장 메서드(하트 선택)
+    private func userSaveSelectDataAdd(row: Int) {
+        defaultsTemp.removeAll() // (유저디폴츠)임시배열 초기화
+        
+        if let saveData = userDefaults.array(forKey: saveKey) as? [[Int]] {
+            defaultsTemp = saveData // 유저디폴츠 데이터를 일단 임시 저장 배열에 넣어주고
+        }
+        
+        defaultsTemp.append(numbers.value[row].numbersList) // 선택된 번호 배열을 추가
+        userDefaults.setValue(defaultsTemp, forKey: saveKey) // 유저디폴츠에 임시 저장된 배열로 다시 설정
+    }
+    
+    // (유저디폴츠)저장된 번호 삭제 메서드(하트 선택 해제)
+    private func userSavedSelectRemove(row: Int) {
+        if let saveData = userDefaults.array(forKey: saveKey) as? [[Int]] {
+            for value in saveData { // 유저디폴츠 데이터로 반복문 돌려서
+                if numbers.value[row].numbersList == value { // 현재 선택해제 된 번호의 값과 같은지 찾고
+                    if let index = defaultsTemp.firstIndex(of: value) { // 현재 값이 임시배열에서 몇번째 인덱스값인지 찾고
+                        defaultsTemp.remove(at: index) // 임시배열에서 인덱스 기준으로 삭제
+                    }
+                }
+            }
+            userDefaults.set(defaultsTemp, forKey: saveKey) // 정리된 상태의 임시배열로 유저디폴츠에 다시 넣어줌
+        }
+    }
+    
 }
 
 
