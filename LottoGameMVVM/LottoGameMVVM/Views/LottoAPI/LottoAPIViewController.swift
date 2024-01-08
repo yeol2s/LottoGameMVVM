@@ -16,7 +16,7 @@ final class LottoAPIViewController: UIViewController {
     
     private var viewModel: LottoAPIViewModel = LottoAPIViewModel() // 뷰모델 인스턴스 생성
     
-    private let ballListView: NumberBallListViewModel = NumberBallListViewModel() // 공 모양으로 만드는 UIStackView 인스턴스 생성
+    private let ballListView: NumberBallListView = NumberBallListView() // 공 모양으로 만드는 UIStackView 인스턴스 생성
     
     let mintGreenColor = UIColor(red: 0.86, green: 0.98, blue: 0.96, alpha: 1.00) // 뷰 백그라운드 컬러
     

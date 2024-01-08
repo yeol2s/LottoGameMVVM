@@ -105,9 +105,7 @@ final class QRcodeReaderViewController: UIViewController {
             case .fail:
                 self?.viewModel.alertPerformAction(title: "인식 실패", message: "인식에 실패했습니다.", cancelButtonUse: false)
                 self?.captureSessionRetry() // 캡처세션 재시작
-            case .stop:
-                // ⚠️ 중지에 대한 처리는 일단 보류(인식 성공 후에 데이터처리 후 stop이 실행됨)
-                // ❓❓❓ 어떻게 처리하는게 효율적일까.
+            default: // .stop
                 break
             }
         }

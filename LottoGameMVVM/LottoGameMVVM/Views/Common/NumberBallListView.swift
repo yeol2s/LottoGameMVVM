@@ -9,8 +9,29 @@ import UIKit
 
 // ❓❓❓ 공 변환 클래스 여러 뷰에서 접근하니까 뷰모델-커먼뷰모델에 속하게 하는게 올바른건가?
 // 번호를 받아서 공 모양으로 변환해주는 UIStackView
-final class NumberBallListViewModel: UIStackView {
+final class NumberBallListView: UIStackView {
     // 6개 번호 배열로 받을때
+    fileprivate func setNumbersColor(_ number: Int, _ ball: UILabel) {
+        // 여기서 UILabel 의 translatesAutoresizingMaskIntoConstraints = false (즉 Autoresizing Mask를 비활성화)를 안해줘도 되는 이유는
+        // UIStackView로 레이아웃을 구성하고 있고, UIStackView는 자체적으로 오토레이아웃을 사용하여 하위뷰를 배치하고 관리하기 때문
+        
+        // 번호 단위별 공의 색상 설정
+        switch number {
+        case 1...9:
+            ball.backgroundColor = UIColor.systemPink
+        case 10...19:
+            ball.backgroundColor = UIColor.systemOrange
+        case 20...29:
+            ball.backgroundColor = UIColor.systemBrown
+        case 30...39:
+            ball.backgroundColor = UIColor.systemIndigo
+        case 40...45:
+            ball.backgroundColor = UIColor.systemGreen
+        default:
+            ball.backgroundColor = UIColor.white
+        }
+    }
+    
     func displayNumbers(_ numbers: [Int]) {
         // 기존 하위뷰 제거
         // 디스플레이 콘텐츠에 대한 뷰를 준비하기 위한 깨끗한 상태를 보장하는 일반적인 방법
@@ -37,24 +58,7 @@ final class NumberBallListViewModel: UIStackView {
             ball.textColor = .white
             ball.widthAnchor.constraint(equalToConstant: ballDiameter).isActive = true
             ball.heightAnchor.constraint(equalToConstant: ballDiameter).isActive = true
-            // 여기서 UILabel 의 translatesAutoresizingMaskIntoConstraints = false (즉 Autoresizing Mask를 비활성화)를 안해줘도 되는 이유는
-            // UIStackView로 레이아웃을 구성하고 있고, UIStackView는 자체적으로 오토레이아웃을 사용하여 하위뷰를 배치하고 관리하기 때문
-            
-            // 번호 단위별 공의 색상 설정
-            switch number {
-            case 1...9:
-                ball.backgroundColor = UIColor.systemPink
-            case 10...19:
-                ball.backgroundColor = UIColor.systemOrange
-            case 20...29:
-                ball.backgroundColor = UIColor.systemBrown
-            case 30...39:
-                ball.backgroundColor = UIColor.systemIndigo
-            case 40...45:
-                ball.backgroundColor = UIColor.systemGreen
-            default:
-                ball.backgroundColor = UIColor.white
-            }
+            setNumbersColor(number, ball)
             arrangedSubViews.append(ball) // [UIView]에 공 모양 하나씩 추가(반복문으로)
         }
         self.spacing = 10 // 각 공 사이 간격 조절

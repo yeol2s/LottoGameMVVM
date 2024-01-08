@@ -8,6 +8,12 @@
 // 📌 Foundation으로 뷰모델에 UIKit 코드없는 것 확인
 import Foundation
 
+// MARK: - 번호 데이터 저장 에러 처리(중복저장 및 초과저장)
+enum SaveError: Error {
+    case overError
+    case duplicationError
+}
+
 // MARK: - 메인 뷰컨트롤러 델리게이트 프로토콜(컨테이너뷰컨과 통신을 위해)
 // 탭을 눌렀을때 전달을 위한 프로토콜
 protocol NumberGenViewControllerDelegate: AnyObject { // AnyObject로 클래스타입만
@@ -100,6 +106,7 @@ final class NumberGenViewModel {
     // (뷰의 번호 생성 화면에서) 번호 저장시 호출되는 메서드
     // 테이블뷰의 셀에서 인덱스를 가지고 모델의 isSaved를 토글 시킴
     // Result 타입 사용(연관값 미사용으로 성공인 경우 true 필요없이 Success는 Void 타입 사용)
+    // 나중에 리팩토링하는 것이 좋겠다.(프로토콜 - 의존성주입)
     func setNumberSaved(row: Int) -> Result<Void, SaveError> {
         // (저장된)유저디폴츠 데이터가 없으면 이 바인딩은 nil이므로 아래 토글부터 실행됨
         // 먼저 바인딩이 완료되면 저장데이터가 10개 이상인지 확인하고 -> '체크했던 것'을 '체크 해제'하는 건지 확인해서 처리
@@ -182,7 +189,7 @@ final class NumberGenViewModel {
         // 유저디폴츠 데이터가 담기면 실행
         guard let saveData = userDefaults.array(forKey: saveKey) as? [[Int]] else { return }
         
-        for (index, nums) in numbers.value.enumerated() {
+        for (index, nums) in numbers.value.enumerated() { // enumerated() 배열의 인덱스와 요소를 함께 가져옴
             if !saveData.contains(nums.numbersList) {
                 numbers.value[index].isSaved = false // 포함되어있지 않다면 false 처리
             }

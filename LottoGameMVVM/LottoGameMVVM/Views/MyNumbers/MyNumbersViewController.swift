@@ -21,7 +21,7 @@ final class MyNumbersViewController: UIViewController {
         return tableView
     }()
     
-    lazy var ballListView: NumberBallListViewModel = NumberBallListViewModel() // 공 모양으로 만드는 UIStackView 인스턴스 생성(직접 번호추가 화면에서 사용됨)(선택시마다 레이블에 공 모양으로 출력하기 위함)
+    lazy var ballListView: NumberBallListView = NumberBallListView() // 공 모양으로 만드는 UIStackView 인스턴스 생성(직접 번호추가 화면에서 사용됨)(선택시마다 레이블에 공 모양으로 출력하기 위함)
     
     lazy var addNumbersCollectionView: UICollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()) // (직접 번호추가 화면)컬렉션 뷰 (오토레이아웃을 할 것이므로 .zero로 설정)
     private let numbers: [Int] = Array(1...45) // 1 ~ 45 배열 생성

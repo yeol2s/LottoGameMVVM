@@ -32,8 +32,8 @@
 		96C0365B2B353F450008A7CF /* ReaderStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C0365A2B353F450008A7CF /* ReaderStatus.swift */; };
 		96C0365D2B353FBD0008A7CF /* QRCodeReaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C0365C2B353FBD0008A7CF /* QRCodeReaderViewModel.swift */; };
 		96DC97FC2B329847005CB933 /* LottoAPIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DC97FB2B329847005CB933 /* LottoAPIViewController.swift */; };
-		96DC97FE2B329949005CB933 /* LottoAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DC97FD2B329949005CB933 /* LottoAPI.swift */; };
-		96E515E02B2DF1E600B5E9B3 /* NumberBallListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96E515DF2B2DF1E600B5E9B3 /* NumberBallListViewModel.swift */; };
+		96DC97FE2B329949005CB933 /* LottoInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DC97FD2B329949005CB933 /* LottoInfo.swift */; };
+		96E515E02B2DF1E600B5E9B3 /* NumberBallListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96E515DF2B2DF1E600B5E9B3 /* NumberBallListView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -64,8 +64,8 @@
 		96C0365A2B353F450008A7CF /* ReaderStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderStatus.swift; sourceTree = "<group>"; };
 		96C0365C2B353FBD0008A7CF /* QRCodeReaderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeReaderViewModel.swift; sourceTree = "<group>"; };
 		96DC97FB2B329847005CB933 /* LottoAPIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottoAPIViewController.swift; sourceTree = "<group>"; };
-		96DC97FD2B329949005CB933 /* LottoAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottoAPI.swift; sourceTree = "<group>"; };
-		96E515DF2B2DF1E600B5E9B3 /* NumberBallListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberBallListViewModel.swift; sourceTree = "<group>"; };
+		96DC97FD2B329949005CB933 /* LottoInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottoInfo.swift; sourceTree = "<group>"; };
+		96E515DF2B2DF1E600B5E9B3 /* NumberBallListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberBallListView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -157,6 +157,7 @@
 		9668056F2B2A57FB00480B40 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				96CAE72A2B4BC07E00ED5E5C /* Common */,
 				966805772B2AB06600480B40 /* ContainerVC */,
 				96C036542B353B520008A7CF /* QRCodeReader */,
 				96DC97FA2B3297E6005CB933 /* LottoAPI */,
@@ -172,7 +173,6 @@
 		966805702B2A580E00480B40 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
-				96E515DE2B2DF16F00B5E9B3 /* CommonViewModel */,
 				966805752B2AACB100480B40 /* NumberGenViewModel.swift */,
 				965853E02B30E6B3007DE9A9 /* NumberSaveViewModel.swift */,
 				96786C0D2B33459800D8A218 /* LottoAPIViewModel.swift */,
@@ -185,7 +185,7 @@
 			isa = PBXGroup;
 			children = (
 				966805732B2AAC5500480B40 /* NumbersGen.swift */,
-				96DC97FD2B329949005CB933 /* LottoAPI.swift */,
+				96DC97FD2B329949005CB933 /* LottoInfo.swift */,
 				96C0365A2B353F450008A7CF /* ReaderStatus.swift */,
 			);
 			path = Models;
@@ -242,20 +242,20 @@
 			path = SubViews;
 			sourceTree = "<group>";
 		};
+		96CAE72A2B4BC07E00ED5E5C /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				96E515DF2B2DF1E600B5E9B3 /* NumberBallListView.swift */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
 		96DC97FA2B3297E6005CB933 /* LottoAPI */ = {
 			isa = PBXGroup;
 			children = (
 				96DC97FB2B329847005CB933 /* LottoAPIViewController.swift */,
 			);
 			path = LottoAPI;
-			sourceTree = "<group>";
-		};
-		96E515DE2B2DF16F00B5E9B3 /* CommonViewModel */ = {
-			isa = PBXGroup;
-			children = (
-				96E515DF2B2DF1E600B5E9B3 /* NumberBallListViewModel.swift */,
-			);
-			path = CommonViewModel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -329,11 +329,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				96E515E02B2DF1E600B5E9B3 /* NumberBallListViewModel.swift in Sources */,
+				96E515E02B2DF1E600B5E9B3 /* NumberBallListView.swift in Sources */,
 				96786C102B3345E100D8A218 /* APIService.swift in Sources */,
 				966805602B2A567800480B40 /* ContainerViewController.swift in Sources */,
 				96C0365D2B353FBD0008A7CF /* QRCodeReaderViewModel.swift in Sources */,
-				96DC97FE2B329949005CB933 /* LottoAPI.swift in Sources */,
+				96DC97FE2B329949005CB933 /* LottoInfo.swift in Sources */,
 				96DC97FC2B329847005CB933 /* LottoAPIViewController.swift in Sources */,
 				965853DA2B30E447007DE9A9 /* NumberBallView.swift in Sources */,
 				9668057A2B2AB0A900480B40 /* MenuViewController.swift in Sources */,

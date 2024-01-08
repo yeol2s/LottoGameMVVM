@@ -15,7 +15,7 @@ final class NumSelectListTableViewCell: UITableViewCell {
     // MARK: - 테이블뷰 셀 속성
     
     // 번호 공 모양 만드는 객체 생성(UIStackView)
-    private let ballListViewModel = NumberBallListViewModel()
+    private let ballListViewModel = NumberBallListView()
     
     // 숫자 출력 레이블
     let numberLabel: UILabel = {
