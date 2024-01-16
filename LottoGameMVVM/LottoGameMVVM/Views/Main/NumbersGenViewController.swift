@@ -216,11 +216,14 @@ final class NumbersGenViewController: UIViewController {
     // (바인딩) 번호 생성 Observable 클로저 할당
     private func setupBindViewModel() {
         viewModel.numbers.subscribe { [weak self] numbers in
-            DispatchQueue.main.async {
-                print("메인뷰 바인딩 실행")
-                self?.numbers = numbers.map { $0.numbersList } // NumbersGen에서 numberList 배열을 map 추출
-                self?.numTableView.reloadData() // 데이터가 추가될때마다 메인뷰컨 테이블뷰 리로드
-            }
+            // UI를 다시 그리는일이 아니니까 메인큐로 보낼 필요가 없으니까 일단 보류
+//            DispatchQueue.main.async {
+//                print("메인뷰 바인딩 실행")
+//                self?.numbers = numbers.map { $0.numbersList } // NumbersGen에서 numberList 배열을 map 추출
+//                self?.numTableView.reloadData() // 데이터가 추가될때마다 메인뷰컨 테이블뷰 리로드
+//            }
+            self?.numbers = numbers.map { $0.numbersList } // NumbersGen에서 numberList 배열을 map 추출
+            self?.numTableView.reloadData() // 데이터가 추가될때마다 메인뷰컨 테이블뷰 리로드
         }
     }
     

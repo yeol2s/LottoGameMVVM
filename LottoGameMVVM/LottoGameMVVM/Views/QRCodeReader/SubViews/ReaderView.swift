@@ -45,7 +45,7 @@ final class ReaderView: UIView {
     
     // MARK: - 뷰 생성자
     
-    // 재정의 생성자
+    // 재정의 생성자(하위클래스에서 커스텀 생성자 구현전에 상위클래스의 재정의 생성자를 작성해야 실수하지 않음)
     override init(frame: CGRect) {
         self.viewModel = QRCodeReaderViewModel()
         super.init(frame: frame) // 저장속성을 모두 초기화 한 후 상위생성자를 호출해야 함.
