@@ -216,14 +216,12 @@ final class NumbersGenViewController: UIViewController {
     // (바인딩) 번호 생성 Observable 클로저 할당
     private func setupBindViewModel() {
         viewModel.numbers.subscribe { [weak self] numbers in
-            // UI를 다시 그리는일이 아니니까 메인큐로 보낼 필요가 없으니까 일단 보류
-//            DispatchQueue.main.async {
-//                print("메인뷰 바인딩 실행")
-//                self?.numbers = numbers.map { $0.numbersList } // NumbersGen에서 numberList 배열을 map 추출
-//                self?.numTableView.reloadData() // 데이터가 추가될때마다 메인뷰컨 테이블뷰 리로드
-//            }
-            self?.numbers = numbers.map { $0.numbersList } // NumbersGen에서 numberList 배열을 map 추출
-            self?.numTableView.reloadData() // 데이터가 추가될때마다 메인뷰컨 테이블뷰 리로드
+            // 클로저 내부에서 UI를 변경하는 경우 해당 클로저가 다른 스레드에서 실행되지 않도록 메인 디스패치큐에 작업을 넣어주는 것이 안전
+            DispatchQueue.main.async {
+                print("메인뷰 바인딩 실행")
+                self?.numbers = numbers.map { $0.numbersList } // NumbersGen에서 numberList 배열을 map 추출
+                self?.numTableView.reloadData() // 데이터가 추가될때마다 메인뷰컨 테이블뷰 리로드
+            }
         }
     }
     
@@ -274,10 +272,11 @@ extension NumbersGenViewController: UITableViewDataSource {
             case .failure(let error): // 에러 처리
                 switch error {
                 case .duplicationError:
-                    showAlert(title: "알림", message: "이미 저장된 번호입니다.", cancelButtonUse: false)
+                    // 여기서는 showAlert() 바로 호출해도 되지만..
+                    viewModel.alertPerformAction(title: "알림", message: "이미 저장된 번호입니다.", cancelButtonUse: false)
                     break
                 case .overError:
-                    showAlert(title: "알림", message: "저장된 번호가 10개입니다.", cancelButtonUse: false)
+                    viewModel.alertPerformAction(title: "알림", message: "저장된 번호가 10개입니다.", cancelButtonUse: false)
                     break
                 }
             }

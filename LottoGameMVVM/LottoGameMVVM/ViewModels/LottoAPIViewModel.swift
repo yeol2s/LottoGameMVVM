@@ -56,7 +56,7 @@ final class LottoAPIViewModel {
         let firstDrawDateString = "2002-12-07 21:00:00" // 첫 번째 추첨일 및 시간(1회차)
         guard let firstDrawDate = dateFormatter.date(from: firstDrawDateString) else { return 0 } // 첫번째 추첨 날짜 형식을 Date 객체로 변환하는 메서드(날짜 형식이 맞지 않는 경우 에러 처리)(변환된 결과가 옵셔널 Data? 형식임 그래서 언래핑)
         
-        let currentData = Date() // Data 구조체를 사용해서 현재 날짜와 시간을 가져옴
+        let currentData = Date() // Date 구조체를 사용해서 현재 날짜와 시간을 가져옴
         let calender = Calendar.current // Calender 구조체를 사용해서 현재의 달력을 가져옴
         // ⭐️Set - 집합(컬렉션) (왜 파라미터값을 Set으로 받지?)
         //Calendar.Component.weekOfYear (열거형으로 되어있음 그리고 Set으로 되어있다?? 뭐지)
